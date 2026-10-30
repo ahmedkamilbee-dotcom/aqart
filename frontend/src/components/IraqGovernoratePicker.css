@@ -1,0 +1,207 @@
+.iraq-governorate-picker {
+  --iraq-map-green: #176b4d;
+  --iraq-map-ink: #18392b;
+  --iraq-map-muted: #6b7a70;
+  --iraq-map-line: #fffdf8;
+  padding: clamp(16px, 2.5vw, 26px);
+  border: 1px solid #dfe8e1;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fff 0%, #f8fbf8 100%);
+  box-shadow: 0 12px 34px rgba(24, 57, 43, .07);
+}
+
+.iraq-picker-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.iraq-picker-heading h3 {
+  margin: 0;
+  color: var(--iraq-map-ink);
+  font-size: clamp(20px, 2.2vw, 27px);
+  font-weight: 900;
+}
+
+.iraq-picker-heading p,
+.iraq-picker-hint {
+  margin: 5px 0 0;
+  color: var(--iraq-map-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.iraq-governorate-count {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border: 1px solid #d5e6db;
+  border-radius: 999px;
+  background: #edf6f0;
+  color: #176b4d;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.iraq-picker-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(220px, .8fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 36px);
+}
+
+.iraq-map-surface {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 390px;
+  overflow: hidden;
+  border: 1px solid #e5ece6;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 48% 46%, rgba(255,255,255,.9), rgba(241,247,242,.8) 70%),
+    repeating-linear-gradient(0deg, transparent 0 33px, rgba(23,107,77,.035) 34px),
+    repeating-linear-gradient(90deg, transparent 0 33px, rgba(23,107,77,.035) 34px);
+}
+
+.iraq-governorate-map {
+  display: block;
+  width: min(100%, 580px);
+  max-height: 470px;
+  overflow: visible;
+  filter: drop-shadow(0 13px 9px rgba(23, 62, 43, .16));
+  transform: perspective(1000px) rotateX(1.4deg);
+}
+
+.iraq-map-region {
+  fill: #b8d5c6;
+  stroke: var(--iraq-map-line);
+  stroke-width: 1.8px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  transition: fill .16s ease, filter .16s ease, stroke-width .16s ease;
+}
+
+.iraq-map-region:nth-child(3n + 1) { fill: #a8ccba; }
+.iraq-map-region:nth-child(3n + 2) { fill: #c5ddcf; }
+.iraq-map-region:hover {
+  fill: #76ad91;
+  filter: drop-shadow(0 3px 2px rgba(14, 67, 43, .2));
+  stroke-width: 2.6px;
+}
+.iraq-map-region.is-selected {
+  fill: #c69a5e !important;
+  stroke: #fff8e9;
+  stroke-width: 3px;
+  filter: drop-shadow(0 3px 3px rgba(107, 70, 25, .3));
+}
+.iraq-map-region:focus-visible {
+  outline: none;
+  stroke: #18392b;
+  stroke-width: 4px;
+}
+
+.iraq-map-label {
+  fill: #173b2b;
+  stroke: rgba(255,255,255,.78);
+  stroke-width: 2.7px;
+  paint-order: stroke fill;
+  font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 900;
+  pointer-events: none;
+  user-select: none;
+}
+.iraq-map-label.is-selected { fill: #fff; stroke: rgba(104, 69, 25, .65); }
+.iraq-map-north {
+  position: absolute;
+  top: 13px;
+  right: 16px;
+  color: #87988d;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.iraq-picker-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.iraq-picker-controls > label {
+  color: var(--iraq-map-ink);
+  font-size: 15px;
+  font-weight: 900;
+}
+.iraq-picker-controls select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid #ccd9ce;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--iraq-map-ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+.iraq-picker-controls select:focus-visible {
+  border-color: var(--iraq-map-green);
+  outline: 3px solid rgba(23, 107, 77, .2);
+  outline-offset: 2px;
+}
+.iraq-selection-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 72px;
+  margin-top: 4px;
+  padding: 13px;
+  border: 1px solid #e7dbc6;
+  border-radius: 14px;
+  background: #fbf7ef;
+}
+.iraq-selection-pin { color: #b47c38; font-size: 17px; }
+.iraq-selection-card > div { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.iraq-selection-card strong { color: var(--iraq-map-ink); font-size: 17px; font-weight: 900; }
+.iraq-selection-card span:not(.iraq-selection-pin) { color: var(--iraq-map-muted); font-size: 12px; font-weight: 700; }
+.iraq-selection-card button {
+  padding: 6px 10px;
+  border: 1px solid #ddcfb5;
+  border-radius: 9px;
+  background: #fff;
+  color: #72542e;
+  font-size: 12px;
+  font-weight: 800;
+}
+.iraq-selection-card button:hover { background: #f2e7d4; }
+.iraq-picker-hint { line-height: 1.7; }
+.iraq-map-attribution {
+  margin: 14px 0 0;
+  color: #78877e;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.iraq-map-attribution a { color: #356b50; text-decoration: underline; text-underline-offset: 2px; }
+
+.iraq-governorate-picker.is-compact { padding: 16px; border-radius: 18px; }
+.iraq-governorate-picker.is-compact .iraq-picker-heading { margin-bottom: 12px; }
+.iraq-governorate-picker.is-compact .iraq-picker-heading h3 { font-size: 19px; }
+.iraq-governorate-picker.is-compact .iraq-picker-heading p { font-size: 13px; }
+.iraq-governorate-picker.is-compact .iraq-picker-content { grid-template-columns: minmax(0, 1.1fr) minmax(190px, .9fr); gap: 16px; }
+.iraq-governorate-picker.is-compact .iraq-map-surface { min-height: 280px; }
+.iraq-governorate-picker.is-compact .iraq-governorate-map { max-height: 330px; }
+.iraq-governorate-picker.is-compact .iraq-map-attribution { font-size: 10px; }
+
+@media (max-width: 760px) {
+  .iraq-picker-content,
+  .iraq-governorate-picker.is-compact .iraq-picker-content { grid-template-columns: minmax(0, 1fr); }
+  .iraq-map-surface { min-height: clamp(270px, 82vw, 400px); }
+  .iraq-governorate-map { max-height: min(86vw, 390px); }
+  .iraq-picker-controls { gap: 8px; }
+  .iraq-selection-card { min-height: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iraq-map-region { transition: none; }
+}

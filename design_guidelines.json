@@ -1,0 +1,535 @@
+{
+  "project_name": "عقاراتي",
+  "theme": "light",
+  "archetype": "Professional real-estate CRM",
+  "reasoning": "A polished Arabic RTL real-estate workspace and customer-facing showcase. Keep agent workflows fast, public listing pages safe to share, and business branding configurable for the office.",
+  "rtl_guidelines": {
+    "direction": "rtl",
+    "html_attribute": "dir=\"rtl\"",
+    "tailwind_logical_properties": "Mandatory. Use 'ps-' (padding start), 'pe-' (padding end), 'ms-' (margin start), 'me-' (margin end) instead of 'pl', 'pr', 'ml', 'mr'.",
+    "icons": "Ensure directional arrows (back/forward) are rotated for RTL using 'rtl:rotate-180' or switched explicitly."
+  },
+  "typography": {
+    "heading_font": "Tajawal",
+    "body_font": "Tajawal",
+    "import_url": "https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap",
+    "hierarchy": {
+      "h1": "text-3xl sm:text-4xl font-black",
+      "h2": "text-xl sm:text-2xl font-black",
+      "h3": "text-lg font-bold",
+      "body": "text-base leading-relaxed",
+      "labels": "text-sm font-bold",
+      "button_text": "text-sm sm:text-base font-bold"
+    },
+    "rules": [
+      "Use clear, readable Arabic text; reserve heavier weights for headings, labels, and actions.",
+      "Avoid tight letter spacing in Arabic.",
+      "Keep body copy concise and line height comfortable."
+    ]
+  },
+  "colors": {
+    "background": {
+      "primary": "#F5F7F5",
+      "secondary": "#FFFFFF",
+      "card": "#FFFFFF"
+    },
+    "text": {
+      "primary": "#14271E",
+      "secondary": "#41544A",
+      "muted": "#64736B"
+    },
+    "brand": {
+      "primary": "#176B4D",
+      "primary_hover": "#10553C",
+      "accent": "#B98A51"
+    },
+    "border": {
+      "default": "#E1E8E3",
+      "active": "#176B4D"
+    },
+    "states": {
+      "error": "#B91C1C",
+      "success": "#15803D"
+    },
+    "contrast_rules": "Keep text and controls clearly distinguishable from their backgrounds; show keyboard focus clearly and do not rely on color alone for status."
+  },
+  "spacing_and_layout": {
+    "philosophy": "Clear hierarchy, generous whitespace, and short paths to common agent tasks.",
+    "page_layout": {
+      "container": "Use a centered max-width content area with responsive padding.",
+      "cards": "Use white surfaces, restrained borders, soft shadows, and consistent rounded corners.",
+      "responsive": "Keep forms and data cards usable on narrow mobile screens; provide bottom navigation on mobile."
+    },
+    "navigation": {
+      "desktop": "Keep properties, customers, appointments, performance, subscriptions, and admin destinations discoverable.",
+      "mobile": "Four primary destinations with secondary sections under a clearly labeled More menu."
+    },
+    "touch_targets": "Aim for at least 44px controls, with larger targets for the most common mobile actions."
+  },
+  "components": {
+    "inputs": {
+      "style": "Use a clear border, readable value text, visible focus ring, and enough vertical padding for touch.",
+      "labels": "Keep explicit labels visible outside inputs.",
+      "error_style": "Show a clear error beside the relevant field and explain how to fix it."
+    },
+    "buttons": {
+      "primary": "Use the brand color for the main action, with a clear hover, focus, disabled, and loading state.",
+      "secondary": "Use a neutral surface and border for supporting actions; keep labels explicit."
+    },
+    "cards": {
+      "style": "White surface, subtle border, consistent rounded corners and restrained shadow.",
+      "data_cards": "Group related metrics and provide a descriptive label for each value."
+    },
+    "icons": {
+      "library": "lucide-react",
+      "size": "Use 16–24px icons in controls and larger icons only for page headers.",
+      "usage": "Pair icons with visible text for primary actions; provide accessible labels for icon-only controls."
+    }
+  },
+  "motion": {
+    "philosophy": "Use brief transitions only when they clarify navigation or feedback.",
+    "duration": "0.2s to 0.3s",
+    "accessibility": "Respect prefers-reduced-motion."
+  },
+  "accessibility": {
+    "screen_readers": "Use semantic landmarks, labels, roles, and Arabic accessible names for icon-only buttons.",
+    "testing": "Add stable data-testid attributes to critical workflows and elements used by automated checks.",
+    "contrast": "Keep text readable on every status and surface.",
+    "focus_states": "All interactive elements need a visible keyboard focus state."
+  },
+  "states": {
+    "error_messages": {
+      "style": "text-lg font-bold text-states-error flex items-center gap-2 mt-2",
+      "icon": "AlertCircle",
+      "placement": "Below input field",
+      "behavior": "Shown immediately on blur or on submit"
+    },
+    "loading_states": {
+      "button": "Show spinner icon, disable pointer events, keep text visible",
+      "page": "Skeleton loader matching card layout",
+      "spinner_color": "text-brand-primary"
+    },
+    "empty_states": {
+      "style": "flex flex-col items-center justify-center py-16 text-center",
+      "illustration_size": "w-48 h-48 mb-6",
+      "title_style": "text-3xl font-bold text-text-primary mb-2",
+      "description_style": "text-xl text-text-secondary",
+      "cta_button": "Optional primary button to encourage action"
+    },
+    "success_messages": {
+      "style": "text-lg font-bold text-states-success flex items-center gap-2 mt-2",
+      "icon": "CheckCircle2",
+      "placement": "Below input field or top of form"
+    }
+  },
+  "data_models": {
+    "property": {
+      "description": "Property model matching FastAPI server.py PropertyCreate schema exactly. All fields in PropertyCreate are required to avoid 422 Unprocessable Entity errors.",
+      "fields": {
+        "owner_name": {
+          "type": "string",
+          "required": true,
+          "label": "اسم المالك",
+          "placeholder": "أدخل اسم المالك الكامل"
+        },
+        "owner_phone": {
+          "type": "string",
+          "required": true,
+          "label": "رقم هاتف المالك",
+          "placeholder": "07xxxxxxxxx",
+          "input_mode": "tel",
+          "validation_hint": "Iraqi phone format: starts with 07 followed by 9 digits"
+        },
+        "governorate": {
+          "type": "string",
+          "required": true,
+          "label": "المحافظة",
+          "placeholder": "اختر المحافظة"
+        },
+        "total_area": {
+          "type": "number",
+          "required": true,
+          "label": "المساحة الإجمالية",
+          "placeholder": "بالأمتار المربعة",
+          "input_mode": "decimal"
+        },
+        "front_width": {
+          "type": "number",
+          "required": true,
+          "label": "عرض الواجهة",
+          "placeholder": "بالأمتار",
+          "input_mode": "decimal"
+        },
+        "length": {
+          "type": "number",
+          "required": true,
+          "label": "الطول",
+          "placeholder": "بالأمتار",
+          "input_mode": "decimal"
+        },
+        "status": {
+          "type": "string",
+          "required": true,
+          "label": "حالة العقار",
+          "enum": [
+            "available",
+            "sold",
+            "rented"
+          ],
+          "labels": {
+            "available": "متاح",
+            "sold": "مباع",
+            "rented": "مؤجر"
+          }
+        },
+        "price": {
+          "type": "number",
+          "required": true,
+          "label": "السعر",
+          "placeholder": "بالدينار العراقي",
+          "input_mode": "decimal",
+          "unit": "د.ع",
+          "validation_hint": "Price in Iraqi Dinar (IQD)"
+        },
+        "bedrooms": {
+          "type": "number",
+          "required": true,
+          "label": "عدد غرف النوم",
+          "placeholder": "0",
+          "default_value": 0,
+          "input_mode": "numeric",
+          "validation_hint": "Set to 0 if property is land or commercial shop"
+        },
+        "bathrooms": {
+          "type": "number",
+          "required": true,
+          "label": "عدد الحمامات",
+          "placeholder": "0",
+          "default_value": 0,
+          "input_mode": "numeric",
+          "validation_hint": "Set to 0 if property is land or commercial shop"
+        },
+        "district": {
+          "type": "string",
+          "required": false,
+          "label": "الحي / المنطقة",
+          "placeholder": "أدخل اسم الحي"
+        },
+        "images": {
+          "type": "string[]",
+          "required": false,
+          "label": "صور العقار"
+        },
+        "created_at": {
+          "type": "datetime",
+          "required": false,
+          "label": "تاريخ الإضافة"
+        },
+        "updated_at": {
+          "type": "datetime",
+          "required": false,
+          "label": "آخر تحديث"
+        }
+      },
+      "required_fields_summary": [
+        "owner_name",
+        "owner_phone",
+        "governorate",
+        "total_area",
+        "front_width",
+        "length",
+        "price",
+        "bedrooms",
+        "bathrooms",
+        "status"
+      ],
+      "optional_fields_summary": [
+        "district",
+        "images"
+      ],
+      "removed_fields": [
+        "title",
+        "description",
+        "type",
+        "owner_id",
+        "area_sqm",
+        "city"
+      ],
+      "notes": "owner_name and owner_phone are used directly instead of owner_id foreign key. No title or description fields exist in server. price, bedrooms, bathrooms are now REQUIRED to match PropertyCreate schema and avoid 422 errors."
+    },
+    "user": {
+      "description": "User model without subscription fields. Subscription status is fetched separately from /api/subscriptions/status. Includes optional office_name for agent-office linking.",
+      "fields": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true,
+          "label": "الاسم الكامل"
+        },
+        "phone": {
+          "type": "string",
+          "required": true,
+          "label": "رقم الهاتف",
+          "placeholder": "07xxxxxxxxx",
+          "input_mode": "tel",
+          "validation_hint": "Iraqi phone format: starts with 07 followed by 9 digits"
+        },
+        "email": {
+          "type": "string",
+          "required": false,
+          "label": "البريد الإلكتروني",
+          "placeholder": "example@email.com",
+          "input_mode": "email"
+        },
+        "password_hash": {
+          "type": "string",
+          "required": true
+        },
+        "role": {
+          "type": "string",
+          "required": true,
+          "enum": [
+            "admin",
+            "agent",
+            "user"
+          ],
+          "labels": {
+            "admin": "مدير",
+            "agent": "وكيل",
+            "user": "مستخدم"
+          }
+        },
+        "office_name": {
+          "type": "string",
+          "required": false,
+          "label": "اسم المكتب العقاري",
+          "placeholder": "أدخل اسم المكتب العقاري",
+          "description": "Optional field for linking agent to their real estate office as defined in server",
+          "show_when": "role === 'agent'"
+        },
+        "created_at": {
+          "type": "datetime",
+          "required": false
+        }
+      },
+      "removed_fields": [
+        "subscription_status",
+        "subscription_ends_at"
+      ],
+      "notes": "Subscription status and end date are NOT stored in user model. They are fetched from GET /api/subscriptions/status endpoint. office_name is optional and used for agent-office linking."
+    },
+    "subscription_status": {
+      "description": "Subscription status fetched from GET /api/subscriptions/status endpoint. Not part of user model.",
+      "endpoint": "GET /api/subscriptions/status",
+      "response_fields": {
+        "has_active": {
+          "type": "boolean",
+          "label": "لديه اشتراك نشط",
+          "ui_display": "Show green badge if true, red badge if false"
+        },
+        "days_remaining": {
+          "type": "number",
+          "label": "الأيام المتبقية",
+          "ui_display": "Show large number with warning color if less than 7 days"
+        },
+        "end_date": {
+          "type": "string",
+          "label": "تاريخ الانتهاء",
+          "format": "YYYY-MM-DD",
+          "ui_display": "Format in Arabic locale date"
+        },
+        "plan_type": {
+          "type": "string",
+          "label": "نوع الباقة",
+          "ui_display": "Show as badge with accent color"
+        },
+        "status": {
+          "type": "string",
+          "label": "حالة الاشتراك",
+          "ui_display": "Show as colored badge: active=green, expired=red, trial=accent"
+        }
+      },
+      "ui_card_style": {
+        "container": "bg-white border-2 border-border rounded-3xl p-8 shadow-xl",
+        "title": "text-2xl font-extrabold text-text-primary mb-6",
+        "value": "text-4xl font-black text-brand-primary",
+        "warning_value": "text-4xl font-black text-states-error",
+        "badge_active": "bg-states-success/10 text-states-success text-xl font-bold px-4 py-2 rounded-full",
+        "badge_expired": "bg-states-error/10 text-states-error text-xl font-bold px-4 py-2 rounded-full",
+        "badge_trial": "bg-brand-accent/10 text-brand-accent-hover text-xl font-bold px-4 py-2 rounded-full"
+      }
+    },
+    "admin_stats": {
+      "description": "Admin dashboard statistics matching FastAPI AdminStats response exactly.",
+      "endpoint": "GET /api/admin/stats",
+      "fields": {
+        "total_properties": {
+          "type": "number",
+          "label": "إجمالي العقارات",
+          "icon": "Building2"
+        },
+        "available": {
+          "type": "number",
+          "label": "متاح",
+          "icon": "CircleCheck"
+        },
+        "sold": {
+          "type": "number",
+          "label": "مباع",
+          "icon": "BadgeCheck"
+        },
+        "rented": {
+          "type": "number",
+          "label": "مؤجر",
+          "icon": "KeyRound"
+        },
+        "total_offices": {
+          "type": "number",
+          "label": "إجمالي المكاتب",
+          "icon": "Briefcase"
+        },
+        "expiring_soon": {
+          "type": "number",
+          "label": "تنتهي قريبًا",
+          "icon": "AlertTriangle",
+          "warning_threshold": "Show in error color if greater than 0"
+        }
+      },
+      "notes": "The administrator summary endpoint covers property and subscription metrics. Customer lead metrics are shown separately in the CRM and performance overview."
+    }
+  },
+  "api_endpoints": {
+    "base_url": "/api",
+    "subscriptions": {
+      "get_status": {
+        "method": "GET",
+        "path": "/api/subscriptions/status",
+        "description": "Get current user subscription status",
+        "response": {
+          "has_active": "boolean",
+          "days_remaining": "number",
+          "end_date": "string (YYYY-MM-DD)",
+          "plan_type": "string",
+          "status": "string"
+        }
+      }
+    },
+    "admin": {
+      "get_stats": {
+        "method": "GET",
+        "path": "/api/admin/stats",
+        "description": "Get admin dashboard statistics",
+        "response": {
+          "total_properties": "number",
+          "available": "number",
+          "sold": "number",
+          "rented": "number",
+          "total_offices": "number",
+          "expiring_soon": "number"
+        }
+      }
+    },
+    "properties": {
+      "create": {
+        "method": "POST",
+        "path": "/api/properties",
+        "required_fields": [
+          "owner_name",
+          "owner_phone",
+          "governorate",
+          "total_area",
+          "front_width",
+          "length",
+          "price",
+          "bedrooms",
+          "bathrooms",
+          "status"
+        ],
+        "optional_fields": [
+          "district",
+          "images"
+        ],
+        "validation_notes": "All required_fields must be present in request body to avoid 422 Unprocessable Entity. bedrooms and bathrooms can be 0 for land/commercial properties."
+      },
+      "list": {
+        "method": "GET",
+        "path": "/api/properties",
+        "description": "List all properties with optional filters"
+      },
+      "get_by_id": {
+        "method": "GET",
+        "path": "/api/properties/{property_id}"
+      },
+      "update": {
+        "method": "PUT",
+        "path": "/api/properties/{property_id}"
+      },
+      "delete": {
+        "method": "DELETE",
+        "path": "/api/properties/{property_id}"
+      }
+    }
+  },
+  "image_urls": [
+    {
+      "url": "https://images.unsplash.com/photo-1721815693498-cc28507c0ba2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB2aWxsYSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjY3MDI2OHww&ixlib=rb-4.1.0&q=85",
+      "category": "hero",
+      "description": "Modern two-story house used for property placeholder or hero landing page section"
+    },
+    {
+      "url": "https://images.pexels.com/photos/34378030/pexels-photo-34378030.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "category": "property_placeholder",
+      "description": "Contemporary villa showcasing sleek architecture for default property images"
+    }
+  ],
+  "instructions_to_main_agent": [
+    "Build the existing application with React, Tailwind CSS, and the current component set; preserve its FastAPI and Supabase architecture.",
+    "Keep the interface Arabic-first and RTL, with the Tajawal font stack and responsive desktop/mobile layouts.",
+    "Use short, familiar Arabic labels. Keep property management, customer leads, follow-up calendar, performance, subscriptions, and admin flows easy to find.",
+    "Customer leads are part of the product. Use the stages new, contacted, visit_scheduled, negotiating, won, and lost; scope agent data to the current agent and let admin review all agents.",
+    "The follow-up calendar is weekly and uses lead follow_up_at dates. Do not include closed leads in follow-up appointments.",
+    "The performance overview uses the authenticated agent scope (or all agents for admin) and reports property status, lead stages, close rate, overdue follow-ups, and six monthly win totals.",
+    "Property sharing must omit the owner phone and other private owner information. Support WhatsApp text, copy, and print-to-PDF from a branded preview.",
+    "The property map is deferred until the app stores usable coordinates.",
+    "Fetch subscription status through the subscriptions API; subscription state is not part of the user record.",
+    "Preserve API field names and validation rules in backend/server.py and backend/leads.py. The API base path is /api.",
+    "Use explicit input labels, clear loading/error/empty states, responsive touch controls, and visible keyboard focus.",
+    "Keep SQL migrations ordered and add a new migration for schema changes already deployed; do not rewrite an applied migration."
+  ],
+  "crm": {
+    "lead_statuses": {
+      "new": "جديد",
+      "contacted": "تم التواصل",
+      "visit_scheduled": "معاينة مجدولة",
+      "negotiating": "قيد التفاوض",
+      "won": "صفقة ناجحة",
+      "lost": "لم تتم الصفقة"
+    },
+    "lead_endpoints": [
+      "/api/leads",
+      "/api/leads/stats",
+      "/api/leads/{lead_id}",
+      "/api/analytics/overview"
+    ],
+    "calendar_filters": [
+      "follow_up_from",
+      "follow_up_to"
+    ],
+    "map_status": "Deferred until property coordinate fields and storage are available."
+  },
+  "public_sharing": {
+    "entrypoint": "/share/{token}",
+    "preview": "Backend serves Open Graph and Twitter metadata, then redirects human visitors to the React property detail page.",
+    "privacy": "Never expose owner name or owner phone in public responses. Agent phone requires explicit consent and public links must be revocable.",
+    "image_access": "Public shared images are served through a token-checked API route; private agent images continue to require authentication."
+  },
+  "commercial_setup": {
+    "support_contacts": "Set REACT_APP_SUPPORT_WHATSAPP and REACT_APP_SUPPORT_INSTAGRAM to the business accounts before opening registration.",
+    "share_domains": "Set PUBLIC_API_URL and REACT_APP_BACKEND_URL to the backend origin and PUBLIC_APP_URL to the frontend origin; all three must use HTTPS in production.",
+    "storage": "Use a private Supabase Storage bucket. Apply 20261027000300_storage_provider.sql; keep the legacy Emergent key while old objects still use that provider.",
+    "payments": "Paid subscription activation is currently manual; do not present automatic card payment as implemented."
+  }
+}
