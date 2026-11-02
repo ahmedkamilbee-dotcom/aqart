@@ -15,6 +15,8 @@ import {
   ArrowRight,
   Trash2,
   MapPin,
+  MessageCircle,
+  Instagram,
 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -37,6 +39,8 @@ export const EditProperty = () => {
     bathrooms: '',
     owner_name: '',
     owner_phone: '',
+    whatsapp_number: '',
+    instagram_username: '',
     governorate: '',
     district: '',
     images: [],
@@ -60,7 +64,9 @@ export const EditProperty = () => {
           bedrooms: data.bedrooms.toString(),
           bathrooms: data.bathrooms.toString(),
           owner_name: data.owner_name || '',
-          owner_phone: data.owner_phone,
+          owner_phone: data.owner_phone || '',
+          whatsapp_number: data.whatsapp_number || '',
+          instagram_username: data.instagram_username || '',
           governorate: data.governorate || '',
           district: data.district || '',
           images: data.images || [],
@@ -125,6 +131,8 @@ export const EditProperty = () => {
         bathrooms: parseInt(formData.bathrooms),
         owner_name: formData.owner_name,
         owner_phone: formData.owner_phone,
+        whatsapp_number: formData.whatsapp_number.trim() || formData.owner_phone.trim(),
+        instagram_username: formData.instagram_username.trim(),
         governorate: formData.governorate,
         district: formData.district,
         images: formData.images,
@@ -304,7 +312,7 @@ export const EditProperty = () => {
           <div>
             <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
               <Phone className="inline-block w-8 h-8 ml-2" />
-              اسم مالك العقار
+              اسم مالك العقار / المكتب
             </label>
             <input
               data-testid="property-owner-name-input"
@@ -312,14 +320,14 @@ export const EditProperty = () => {
               value={formData.owner_name}
               onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
               className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-              placeholder="اسم المالك"
+              placeholder="اسم المالك أو المكتب"
             />
           </div>
 
           <div>
             <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
               <Phone className="inline-block w-8 h-8 ml-2" />
-              رقم صاحب العقار
+              رقم الهاتف الأساسي
             </label>
             <input
               data-testid={PROPERTY.ownerPhoneInput}
@@ -327,6 +335,34 @@ export const EditProperty = () => {
               value={formData.owner_phone}
               onChange={(e) => setFormData({ ...formData, owner_phone: e.target.value })}
               className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+            />
+          </div>
+
+          <div>
+            <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+              <MessageCircle className="inline-block w-8 h-8 ml-2 text-green-600" />
+              رقم الواتساب (اختياري)
+            </label>
+            <input
+              type="tel"
+              value={formData.whatsapp_number}
+              onChange={(e) => setFormData({ ...formData, whatsapp_number: e.target.value })}
+              className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+              placeholder="اتركه فارغاً إذا كان نفس رقم الهاتف الأساسي"
+            />
+          </div>
+
+          <div>
+            <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+              <Instagram className="inline-block w-8 h-8 ml-2 text-pink-600" />
+              حساب الإنستغرام (اختياري)
+            </label>
+            <input
+              type="text"
+              value={formData.instagram_username}
+              onChange={(e) => setFormData({ ...formData, instagram_username: e.target.value })}
+              className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+              placeholder="مثال: aqarat_baghdad"
             />
           </div>
 
