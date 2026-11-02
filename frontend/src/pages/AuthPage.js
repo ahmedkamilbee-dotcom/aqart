@@ -37,6 +37,19 @@ export const AuthPage = () => {
       if (isLogin) {
         await login(identifier, password);
       } else {
+        if (!identifier.includes('@')) {
+          const cleanPhone = identifier.trim().replace(/[\s\-()]+/g, '');
+          if (!/^07[78][0-9]{8}$/.test(cleanPhone)) {
+            setError('رقم الهاتف يجب أن يتكون من 11 رقماً ويبدأ بـ 077 أو 078');
+            return;
+          }
+        }
+
+        if (Array.from(password).length < 10) {
+          setError('كلمة المرور يجب أن تكون 10 أحرف على الأقل وتحتوي على رمز خاص مثل #');
+          return;
+        }
+
         await register(name, identifier, password, officeName);
       }
       navigate('/dashboard');
@@ -105,16 +118,17 @@ export const AuthPage = () => {
                   <span>/</span>
                   <Mail className="w-8 h-8" />
                 </div>
-                رقم الهاتف أو البريد الإلكتروني
+                {isLogin ? 'رقم الهاتف أو البريد الإلكتروني' : 'رقم الهاتف العراقي (077 أو 078) أو البريد الإلكتروني'}
               </label>
               <input
                 data-testid={AUTH.identifierInput}
                 type="text"
+                inputMode={!isLogin && !identifier.includes('@') ? 'tel' : undefined}
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 required
                 className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-                placeholder="مثال: 0501234567 أو email@example.com"
+                placeholder="مثال: 07712345678 أو 07812345678 أو email@example.com"
               />
             </div>
 
@@ -132,6 +146,11 @@ export const AuthPage = () => {
                 className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
                 placeholder="أدخل كلمة المرور"
               />
+              {!isLogin && (
+                <p className="mt-2 text-base font-semibold text-[#6B7A70]">
+                  10 أحرف على الأقل، مع رمز خاص مثل # أو !
+                </p>
+              )}
             </div>
 
             {!isLogin && (

@@ -12,7 +12,7 @@ const plans = [
   { name: 'تجربة مجانية', duration: '30 يوماً', amount: 0, free: true, detail: 'جرّب إدارة العقارات والعملاء قبل الاشتراك.' },
   { name: 'شهري', duration: 'شهر واحد', amount: 25000, detail: 'مرونة للتجربة والتشغيل الشهري.' },
   { name: 'ربع سنوي', duration: '3 أشهر', amount: 65000, detail: 'متابعة مستمرة بتكلفة أقل من الدفع الشهري.' },
-  { name: 'سنوي', duration: '12 شهراً', amount: 275000, detail: 'خطة سنوية للمكاتب التي تعتمد النظام يومياً.', featured: true },
+  { name: 'سنوي', duration: '12 شهراً', amount: 250000, detail: 'خطة سنوية للمكاتب التي تعتمد النظام يومياً.', featured: true },
 ];
 
 const features = [
@@ -142,9 +142,9 @@ export const LandingPage = () => {
         <div className="landing-section-heading"><span className="landing-section-label">أسعار واضحة بالدينار العراقي</span><h2>اختار الباقة المناسبة إلك</h2><p>ابدأ مجاناً، وبعدها اختار مدة الاشتراك اللي تناسب شغلك.</p></div>
         <div className="landing-price-grid">{plans.map((plan) => <article className={`landing-price-card ${plan.featured ? 'landing-price-card-featured' : ''}`} key={plan.name}>
           {plan.featured && <span className="landing-price-badge">للاستخدام السنوي</span>}
-          <h3>{plan.name}</h3><p className="landing-price-duration">{plan.duration}</p><div className="landing-price-value">{plan.free ? <strong>مجاناً</strong> : <><strong>{money(plan.amount)}</strong><span> د.ع</span></>}</div><p className="landing-price-detail">{plan.detail}</p><button className={`landing-button ${plan.featured ? 'landing-button-primary' : 'landing-button-outline'}`} onClick={() => { const supportUrl = buildSupportWhatsAppUrl(`أرغب بالاستفسار عن باقة ${plan.name}`); if (supportUrl && !plan.free) window.open(supportUrl, '_blank', 'noopener,noreferrer'); else go(plan.free ? startPath : (user ? '/subscriptions' : '/auth?mode=register')); }}>{plan.free ? 'ابدأ التجربة' : 'استفسر عن الباقة'} <ArrowLeft size={17} /></button>
+          <h3>{plan.name}</h3><p className="landing-price-duration">{plan.duration}</p><div className="landing-price-value">{plan.free ? <strong>مجاناً</strong> : <><strong>{money(plan.amount)}</strong><span> د.ع</span></>}</div><p className="landing-price-detail">{plan.detail}</p><button className={`landing-button ${plan.featured ? 'landing-button-primary' : 'landing-button-outline'}`} onClick={() => { const price = plan.free ? 'مجاناً' : `${money(plan.amount)} د.ع`; const supportUrl = buildSupportWhatsAppUrl(`السلام عليكم، أرغب بطلب باقة ${plan.name} (${price}) من منصة عقاراتي.`); if (supportUrl) window.open(supportUrl, '_blank', 'noopener,noreferrer'); }}>{plan.free ? 'اطلب التجربة عبر واتساب' : 'اشترك عبر واتساب'} <ArrowLeft size={17} /></button>
         </article>)}</div>
-        <p className="landing-pricing-note">{supportWhatsAppNumber ? 'تفعيل الاشتراكات المدفوعة يتم بعد التواصل مع الإدارة عبر واتساب.' : 'تفعيل الاشتراكات المدفوعة يتم يدوياً من إدارة المنصة.'}</p>
+        <p className="landing-pricing-note">طلبات الباقات المجانية والمدفوعة تصل إلى سجاد عبر واتساب.</p>
       </section>
 
       <section className="landing-section landing-faq" id="faq">

@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { PROPERTY } from '../constants/testIds';
 import { IraqGovernoratePicker } from '../components/IraqGovernoratePicker';
+import { PrivatePropertyImage } from '../components/PrivatePropertyImage';
+import { uploadPropertyImage } from '../lib/uploadPropertyImage';
 import {
   Home,
   DollarSign,
@@ -19,7 +21,7 @@ import {
   Instagram,
 } from 'lucide-react';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${(process.env.REACT_APP_BACKEND_URL || '').replace(/\/+$/, '')}/api`;
 
 export const EditProperty = () => {
   const navigate = useNavigate();
@@ -84,29 +86,24 @@ export const EditProperty = () => {
   }, [id, user, navigate]);
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+    const input = e.target;
+    const file = input.files?.[0];
     if (!file) return;
 
     setUploadingImage(true);
     setError('');
 
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-
-      const { data } = await axios.post(`${API}/upload`, fd, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
+      const imageUrl = await uploadPropertyImage(file);
       setFormData((prev) => ({
         ...prev,
-        images: [...prev.images, `${process.env.REACT_APP_BACKEND_URL}${data.url}`],
+        images: [...prev.images, imageUrl],
       }));
     } catch (err) {
-      setError('خطأ في رفع الصورة');
+      setError(err.response?.data?.detail || err.message || 'تعذر رفع الصورة. حاول مرة أخرى.');
     } finally {
       setUploadingImage(false);
+      input.value = '';
     }
   };
 
@@ -390,7 +387,7 @@ export const EditProperty = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {formData.images.map((img, idx) => (
                   <div key={idx} className="relative group">
-                    <img
+                    <PrivatePropertyImage
                       src={img}
                       alt={`صورة ${idx + 1}`}
                       className="w-full h-32 object-cover rounded-xl border-2 border-[#D2CFC9]"

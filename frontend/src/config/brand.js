@@ -1,5 +1,4 @@
-const rawWhatsApp = process.env.REACT_APP_SUPPORT_WHATSAPP || '';
-export const supportWhatsAppNumber = rawWhatsApp.replace(/\D/g, '');
+export const supportWhatsAppNumber = '9647760307768';
 export const supportInstagramUrl = process.env.REACT_APP_SUPPORT_INSTAGRAM || '';
 
 export const buildSupportWhatsAppUrl = (message = '') => {

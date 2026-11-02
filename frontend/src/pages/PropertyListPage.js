@@ -26,6 +26,7 @@ import {
   LogIn,
 } from 'lucide-react';
 import { SubscriptionBanner } from '../components/SubscriptionBanner';
+import { PrivatePropertyImage } from '../components/PrivatePropertyImage';
 import { IraqGovernoratePicker } from '../components/IraqGovernoratePicker';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -416,7 +417,7 @@ export const PropertyListPage = ({ status, testid }) => {
                 onClick={() => navigate(`/property/${property.id}`)}
               >
                 {property.images && property.images.length > 0 ? (
-                  <img src={property.images[0]} alt="عقار" className="w-full h-56 object-cover" />
+                  <PrivatePropertyImage src={property.images[0]} alt="عقار" className="w-full h-56 object-cover" />
                 ) : (
                   <div className="w-full h-56 bg-[#F9F6F0] flex items-center justify-center">
                     <Building2 className="w-20 h-20 text-[#6B7A70]" />

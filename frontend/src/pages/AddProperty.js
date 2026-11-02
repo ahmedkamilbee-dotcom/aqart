@@ -5,10 +5,12 @@ import axios from 'axios';
 import { PROPERTY } from '../constants/testIds';
 import { ChevronLeft, ChevronRight, Home, DollarSign, Ruler, BedDouble, Upload, Phone, User, MapPin, XCircle, MessageCircle, Instagram } from 'lucide-react';
 import { useSubscriptionStatus, SubscriptionBanner } from '../components/SubscriptionBanner';
+import { PrivatePropertyImage } from '../components/PrivatePropertyImage';
 import { buildSupportWhatsAppUrl } from '../config/brand';
 import { IraqGovernoratePicker } from '../components/IraqGovernoratePicker';
+import { uploadPropertyImage } from '../lib/uploadPropertyImage';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${(process.env.REACT_APP_BACKEND_URL || '').replace(/\/+$/, '')}/api`;
 
 const STEPS = [
   { title: 'المعلومات الأساسية', icon: Home },
@@ -90,29 +92,24 @@ export const AddProperty = () => {
   };
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+    const input = e.target;
+    const file = input.files?.[0];
     if (!file) return;
 
     setUploadingImage(true);
     setError('');
 
     try {
-      const formDataUpload = new FormData();
-      formDataUpload.append('file', file);
-
-      const { data } = await axios.post(`${API}/upload`, formDataUpload, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      setFormData({
-        ...formData,
-        images: [...formData.images, `${process.env.REACT_APP_BACKEND_URL}${data.url}`],
-      });
+      const imageUrl = await uploadPropertyImage(file);
+      setFormData((previous) => ({
+        ...previous,
+        images: [...previous.images, imageUrl],
+      }));
     } catch (err) {
-      setError('خطأ في رفع الصورة');
+      setError(err.response?.data?.detail || err.message || 'تعذر رفع الصورة. حاول مرة أخرى.');
     } finally {
       setUploadingImage(false);
+      input.value = '';
     }
   };
 
@@ -403,7 +400,7 @@ export const AddProperty = () => {
             {formData.images.length > 0 && (
               <div className="grid grid-cols-2 gap-4">
                 {formData.images.map((img, idx) => (
-                  <img
+                  <PrivatePropertyImage
                     key={idx}
                     src={img}
                     alt={`صورة ${idx + 1}`}

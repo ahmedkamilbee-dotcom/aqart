@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CreditCard, Calendar, CheckCircle, ArrowRight, Star, Crown, Gem, Gift, MessageCircle } from 'lucide-react';
 import { SubscriptionBanner } from '../components/SubscriptionBanner';
-import { buildSupportWhatsAppUrl, supportWhatsAppNumber } from '../config/brand';
+import { buildSupportWhatsAppUrl } from '../config/brand';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${(process.env.REACT_APP_BACKEND_URL || '').replace(/\/+$/, '')}/api`;
 
 const PLAN_ICONS = {
   trial: Gift,
@@ -21,8 +21,9 @@ const PLAN_COLORS = {
   yearly: 'bg-amber-50 border-amber-400',
 };
 
-const buildWhatsAppUrl = (planLabel) => {
-  const message = `أرغب بتجديد الاشتراك باقة ${planLabel}`;
+const buildWhatsAppUrl = (planLabel, amount) => {
+  const price = amount ? `${amount.toLocaleString('ar-IQ')} دينار عراقي` : 'مجاناً';
+  const message = `السلام عليكم، أرغب بطلب باقة ${planLabel} (${price}) من منصة عقاراتي.`;
   return buildSupportWhatsAppUrl(message);
 };
 
@@ -133,7 +134,7 @@ export const Subscriptions = () => {
         {/* Plans Grid (محدث ليعرض 4 باقات بشكل متناسق) */}
         <h2 className="text-3xl sm:text-4xl font-black text-[#0A1F13] mb-2">اختر خطة الاشتراك</h2>
         <p className="text-lg sm:text-xl font-bold text-[#2B4736] mb-6">
-          {supportWhatsAppNumber ? 'اضغط على الباقة المطلوبة وسنتواصل معك عبر واتساب' : 'يمكنك تجربة الباقة المجانية الآن؛ أضف رقم واتساب العمل لإتاحة طلب الباقات المدفوعة.'}
+          اضغط على أي باقة لإرسال طلبك إلى سجاد عبر واتساب
         </p>
 
         {loading ? (
@@ -144,14 +145,14 @@ export const Subscriptions = () => {
               const Icon = PLAN_ICONS[plan.plan_type] || Star;
               const label = plan.label || planLabelFor(plan.plan_type);
               const isTrial = plan.plan_type === 'trial' || plan.amount === 0;
-              const whatsappUrl = isTrial ? '' : buildWhatsAppUrl(label);
+              const whatsappUrl = buildWhatsAppUrl(label, plan.amount);
 
               return (
                 <a
                   key={plan.plan_type}
-                  href={isTrial ? undefined : (whatsappUrl || undefined)}
-                  aria-disabled={isTrial || !whatsappUrl}
-                  onClick={(event) => { if (isTrial || !whatsappUrl) event.preventDefault(); }}
+                  href={whatsappUrl || undefined}
+                  aria-disabled={!whatsappUrl}
+                  onClick={(event) => { if (!whatsappUrl) event.preventDefault(); }}
                   target={whatsappUrl ? '_blank' : undefined}
                   rel="noopener noreferrer"
                   data-testid={`plan-${plan.plan_type}`}
@@ -194,7 +195,7 @@ export const Subscriptions = () => {
                     } text-white rounded-2xl flex items-center justify-center gap-2 transition-colors text-lg font-black`}
                   >
                     <MessageCircle className="w-6 h-6" />
-                    {isTrial ? 'طلب تجربة عبر واتساب' : 'اشترك عبر واتساب'}
+                    {isTrial ? 'اطلب عبر واتساب' : 'اشترك عبر واتساب'}
                   </div>
                 </a>
               );

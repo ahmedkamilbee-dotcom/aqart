@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { PROPERTY } from '../constants/testIds';
 import { createPublicPropertyUrl } from '../config/brand';
+import { PrivatePropertyImage } from '../components/PrivatePropertyImage';
 import {
   Building2,
   DollarSign,
@@ -283,7 +284,7 @@ export const PropertyDetails = () => {
         <div className="bg-white border-2 border-[#D2CFC9] rounded-3xl overflow-hidden mb-6">
           {property.images && property.images.length > 0 ? (
             <>
-              <img
+              <PrivatePropertyImage
                 src={property.images[currentImageIdx]}
                 alt="عقار"
                 className="w-full h-96 object-cover"
@@ -292,7 +293,7 @@ export const PropertyDetails = () => {
               {property.images.length > 1 && (
                 <div className="p-4 flex gap-3 overflow-x-auto">
                   {property.images.map((img, idx) => (
-                    <img
+                    <PrivatePropertyImage
                       key={idx}
                       src={img}
                       alt={`صورة ${idx + 1}`}
@@ -513,7 +514,7 @@ export const PropertyDetails = () => {
                 <button onClick={() => setShareOpen(false)} aria-label="إغلاق" className="rounded-xl p-2 text-[#2B4736] hover:bg-[#F9F6F0]"><X className="h-5 w-5" /></button>
               </div>
               <div className="rounded-2xl border border-[#D2CFC9] bg-[#F9F6F0] p-5">
-                {property.images?.[0] && <img src={property.images[0]} alt="صورة العقار" className="mb-4 h-44 w-full rounded-xl object-cover" />}
+                {property.images?.[0] && <PrivatePropertyImage src={property.images[0]} alt="صورة العقار" className="mb-4 h-44 w-full rounded-xl object-cover" />}
                 <p className="mb-2 text-xs font-black uppercase tracking-wide text-[#1A5632]">عقاراتي · عرض عقاري</p>
                 <h3 className="mb-3 text-xl font-black text-[#0A1F13]">{[property.governorate, property.district].filter(Boolean).join(' · ') || 'عقار مميز'}</h3>
                 <p className="mb-4 text-2xl font-black text-[#1A5632]">{Number(property.price).toLocaleString('ar-IQ')} د.ع</p>

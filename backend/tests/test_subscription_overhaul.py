@@ -1,7 +1,7 @@
 """Iteration 3: Subscription system overhaul tests.
 
 Covers:
-- Public /api/subscriptions/plans includes the free 30-day trial and has yearly=275000
+- Public /api/subscriptions/plans includes the free 30-day trial and has yearly=250000
 - Admin /api/admin/subscriptions/plans lists all 4 plans
 - Every new registration automatically receives a 30-day trial
 - POST /api/subscriptions is admin-only, accepts user_id
@@ -31,7 +31,7 @@ def _register_agent(prefix="TEST_subagent"):
     r = s.post(f"{API}/auth/register", json={
         "name": f"{prefix} {uuid.uuid4().hex[:4]}",
         "email": email,
-        "password": "test1234",
+        "password": "test!1234xx",
         "office_name": f"TEST Office {uuid.uuid4().hex[:6]}",
     })
     assert r.status_code == 200, f"register failed: {r.status_code} {r.text}"
@@ -125,8 +125,8 @@ class TestPublicPlans:
         assert by_type["trial"]["days"] == 30
         assert by_type["monthly"]["amount"] == 25000
         assert by_type["quarterly"]["amount"] == 65000
-        assert by_type["yearly"]["amount"] == 275000, \
-            f"Yearly must be 275000 (was 250000). Got {by_type['yearly']['amount']}"
+        assert by_type["yearly"]["amount"] == 250000, \
+            f"Yearly must be 250000. Got {by_type['yearly']['amount']}"
         for p in plans:
             assert p["currency"] == "IQD"
 
@@ -151,7 +151,7 @@ class TestAdminPlans:
         assert "trial" in by_type
         assert by_type["trial"]["amount"] == 0
         assert by_type["trial"]["days"] == 30
-        assert by_type["yearly"]["amount"] == 275000
+        assert by_type["yearly"]["amount"] == 250000
 
 
 # ---------- 3. POST /subscriptions admin-only ----------
@@ -185,7 +185,7 @@ class TestSubscriptionCreation:
                                json={"plan_type": "yearly", "user_id": uid})
         assert r.status_code == 200
         d = r.json()
-        assert d["amount"] == 275000
+        assert d["amount"] == 250000
         assert d["plan_type"] == "yearly"
         from datetime import datetime
         end = datetime.fromisoformat(d["end_date"].replace("Z", "+00:00"))

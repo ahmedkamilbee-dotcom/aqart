@@ -143,13 +143,13 @@ MAX_IMAGES_PER_PROPERTY = 20
 
 
 # ---------- Password Config ----------
-MIN_PASSWORD_LENGTH = 8
+MIN_PASSWORD_LENGTH = 10
 BCRYPT_MAX_BYTES = 72
 
 
 # ---------- Basic Validation Regex ----------
 EMAIL_REGEX = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
-PHONE_REGEX = re.compile(r"^\+?[0-9]{7,15}$")
+IRAQI_MOBILE_REGEX = re.compile(r"^07[78][0-9]{8}$")
 
 
 # ---------- Helpers ----------
@@ -262,6 +262,12 @@ def _validate_password_strength(password: str):
         raise HTTPException(
             status_code=400,
             detail=f"كلمة المرور يجب أن تكون {MIN_PASSWORD_LENGTH} أحرف على الأقل",
+        )
+
+    if not any(not character.isalnum() and not character.isspace() for character in password):
+        raise HTTPException(
+            status_code=400,
+            detail="كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل مثل #",
         )
 
 
@@ -685,7 +691,7 @@ PLAN_PRICING = {
         "label": "ربع سنوي",
     },
     "yearly": {
-        "amount": 275000,
+        "amount": 250000,
         "days": 365,
         "label": "سنوي",
     },
@@ -936,8 +942,11 @@ async def register(
     clean_phone = None
     if user.phone and user.phone.strip():
         clean_phone = re.sub(r"[\s\-()]+", "", user.phone.strip())
-        if not PHONE_REGEX.match(clean_phone):
-            raise HTTPException(status_code=400, detail="رقم الهاتف غير صحيح")
+        if not IRAQI_MOBILE_REGEX.fullmatch(clean_phone):
+            raise HTTPException(
+                status_code=400,
+                detail="رقم الهاتف يجب أن يتكون من 11 رقماً ويبدأ بـ 077 أو 078",
+            )
 
     if not clean_email and not clean_phone:
         raise HTTPException(status_code=400, detail="يجب إدخال البريد الإلكتروني أو رقم الهاتف")
@@ -1690,7 +1699,6 @@ async def delete_property(
 # ---------- Uploads ----------
 @api_router.post("/upload")
 async def upload_image(
-    request: Request,
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -1706,18 +1714,6 @@ async def upload_image(
             status_code=400,
             detail="نوع الملف غير مدعوم، يرجى رفع صور فقط بصيغ (jpg, jpeg, png, webp)",
         )
-
-    content_length = request.headers.get("content-length")
-
-    if content_length:
-        try:
-            if int(content_length) > MAX_FILE_SIZE:
-                raise HTTPException(
-                    status_code=400,
-                    detail="حجم الملف يتجاوز الحد المسموح به (5 ميجابايت)",
-                )
-        except ValueError:
-            pass
 
     chunks = []
     total_size = 0
