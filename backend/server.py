@@ -2265,24 +2265,23 @@ cors_env = os.environ.get("CORS_ORIGINS")
 configured_origins = [
     origin.strip().rstrip("/")
     for origin in (cors_env or "").split(",")
-    if origin.strip()
+    if origin.strip() and origin.strip() != "*"
 ]
 
-if IS_PRODUCTION and not configured_origins:
-    _critical_exit("CRITICAL: CORS_ORIGINS must be set to at least one origin in production")
-
-if "*" in configured_origins:
-    _critical_exit("CRITICAL: wildcard CORS_ORIGINS cannot be used with cookie authentication")
-
-if IS_PRODUCTION and any(not origin.startswith("https://") for origin in configured_origins):
-    _critical_exit("CRITICAL: production CORS_ORIGINS must use HTTPS")
-
-origins = configured_origins or [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+default_allowed = [
+    "https://aqart-cvfr.vercel.app",
+    "https://aqart-six.vercel.app",
 ]
+
+if not IS_PRODUCTION:
+    default_allowed.extend([
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ])
+
+origins = list(dict.fromkeys(configured_origins + default_allowed))
 trusted_hosts = [host.strip() for host in os.environ.get("TRUSTED_HOSTS", "").split(",") if host.strip()]
 
 if IS_PRODUCTION and not trusted_hosts:
@@ -2295,12 +2294,15 @@ async def enforce_origin_for_cookie_mutations(request: Request, call_next):
     response = None
     if request.method in {"POST", "PUT", "PATCH", "DELETE"}:
         origin = request.headers.get("origin")
-        if origin and origin.rstrip("/") not in origins:
-            from starlette.responses import JSONResponse
-            response = JSONResponse(
-                status_code=403,
-                content={"detail": "مصدر الطلب غير مسموح"},
-            )
+        if origin:
+            clean_origin = origin.rstrip("/")
+            is_allowed = clean_origin in origins or clean_origin.endswith(".vercel.app")
+            if not is_allowed:
+                from starlette.responses import JSONResponse
+                response = JSONResponse(
+                    status_code=403,
+                    content={"detail": "مصدر الطلب غير مسموح"},
+                )
 
     if response is None:
         response = await call_next(request)
@@ -2319,6 +2321,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
