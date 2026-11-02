@@ -72,6 +72,8 @@ class Property(Base):
     bathrooms = Column(Integer, nullable=False)
     owner_name = Column(Text, nullable=True, default='')
     owner_phone = Column(Text, nullable=False)
+    whatsapp_number = Column(Text, nullable=True)
+    instagram_username = Column(Text, nullable=True)
     images = Column(JSONB, nullable=False, default=list)
     public_share_token = Column(Text, nullable=True)
     public_contact_enabled = Column(Boolean, nullable=False, default=False)
