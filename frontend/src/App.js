@@ -39,17 +39,18 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            {/* 1. الخريطة التفاعلية أصبحت مفتوحة للجميع في الرابط الرئيسي والرئيسية */}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+
+            {/* صفحة تسجيل الدخول ومشاركة الروابط */}
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/share/:token" element={<PublicPropertyPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+
+            {/* 2. تفاصيل العقار مفتوحة للزبائن للمعاينة دون إجبارهم على تسجيل الدخول */}
+            <Route path="/property/:id" element={<PropertyDetails />} />
+
+            {/* 3. بقية لوحات التحكم وإضافة العقارات محمية لأصحاب المكاتب فقط */}
             <Route
               path="/sold"
               element={
@@ -71,14 +72,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AddProperty />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/property/:id"
-              element={
-                <ProtectedRoute>
-                  <PropertyDetails />
                 </ProtectedRoute>
               }
             />
@@ -130,6 +123,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* إعادة توجيه أي مسار خاطئ إلى الصفحة الرئيسية */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <GlobalFooter />
