@@ -21,6 +21,8 @@ import {
   Share2,
   Copy,
   X,
+  MessageCircle,
+  Instagram,
 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -155,6 +157,31 @@ export const PropertyDetails = () => {
     }
   };
 
+  // معالجة رابط الواتساب التفاعلي
+  const getDirectWhatsAppLink = () => {
+    const rawNumber = property.whatsapp_number || property.owner_phone;
+    if (!rawNumber) return null;
+    let cleanNumber = rawNumber.replace(/[^0-9]/g, '');
+    if (cleanNumber.startsWith('07')) {
+      cleanNumber = '964' + cleanNumber.substring(1);
+    } else if (cleanNumber.startsWith('00964')) {
+      cleanNumber = cleanNumber.substring(2);
+    }
+    const locationInfo = [property.governorate, property.district].filter(Boolean).join(' - ');
+    const msg = encodeURIComponent(`السلام عليكم، شفت إعلان العقار على منصتكم${locationInfo ? ` في (${locationInfo})` : ''} وأرغب بالاستفسار عن التفاصيل.`);
+    return `https://wa.me/${cleanNumber}?text=${msg}`;
+  };
+
+  // معالجة رابط الإنستغرام
+  const getInstagramLink = () => {
+    if (!property.instagram_username) return null;
+    const cleanUser = property.instagram_username.trim().replace(/^@/, '');
+    if (cleanUser.startsWith('http://') || cleanUser.startsWith('https://')) {
+      return cleanUser;
+    }
+    return `https://instagram.com/${cleanUser}`;
+  };
+
   const statusLabel = {
     available: 'متاح',
     sold: 'مباع',
@@ -195,6 +222,9 @@ export const PropertyDetails = () => {
       </div>
     );
   }
+
+  const directWhatsAppUrl = getDirectWhatsAppLink();
+  const directInstagramUrl = getInstagramLink();
 
   return (
     <div
@@ -302,6 +332,51 @@ export const PropertyDetails = () => {
             </span>
           </div>
 
+          {/* أزرار التواصل المباشرة الموجهة للزبائن */}
+          <div className="my-8 p-6 bg-[#F9F6F0] rounded-3xl border-2 border-[#D2CFC9]">
+            <h3 className="text-2xl font-black text-[#0A1F13] mb-4 text-center sm:text-right">
+              تواصل مع المعلن مباشرة:
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {/* زر واتساب */}
+              {directWhatsAppUrl && (
+                <a
+                  href={directWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[64px] px-6 bg-[#25D366] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#1ebd5a] transition-colors text-xl font-black shadow-md"
+                >
+                  <MessageCircle className="w-8 h-8" />
+                  محادثة واتساب
+                </a>
+              )}
+
+              {/* زر اتصال هاتفي */}
+              {property.owner_phone && (
+                <a
+                  href={`tel:${property.owner_phone}`}
+                  className="min-h-[64px] px-6 bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors text-xl font-black shadow-md"
+                >
+                  <Phone className="w-8 h-8" />
+                  اتصال هاتف
+                </a>
+              )}
+
+              {/* زر إنستغرام */}
+              {directInstagramUrl && (
+                <a
+                  href={directInstagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[64px] px-6 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white rounded-2xl flex items-center justify-center gap-3 hover:opacity-95 transition-opacity text-xl font-black shadow-md"
+                >
+                  <Instagram className="w-8 h-8" />
+                  حساب إنستغرام
+                </a>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
               <div className="flex items-center gap-3 mb-2">
@@ -387,7 +462,7 @@ export const PropertyDetails = () => {
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
               <div className="flex items-center gap-3 mb-2">
                 <User className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">اسم مالك العقار</span>
+                <span className="text-2xl font-bold text-[#2B4736]">اسم صاحب الإعلان / المكتب</span>
               </div>
               <p
                 className="text-3xl font-black text-[#0A1F13]"
@@ -400,7 +475,7 @@ export const PropertyDetails = () => {
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
               <div className="flex items-center gap-3 mb-2">
                 <Phone className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">رقم المالك</span>
+                <span className="text-2xl font-bold text-[#2B4736]">رقم الهاتف</span>
               </div>
               <a
                 href={`tel:${property.owner_phone}`}
