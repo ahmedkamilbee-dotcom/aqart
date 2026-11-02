@@ -229,7 +229,6 @@ async def _revoke_refresh_token(
     try:
         await db.commit()
     except IntegrityError:
-        # The primary key makes concurrent refresh attempts single-use across workers.
         await db.rollback()
         return False
     return True
@@ -538,6 +537,8 @@ class UserResponse(BaseModel):
     role: str
     office_name: Optional[str] = None
     created_at: str
+    access_token: Optional[str] = None
+    refresh_token: Optional[str] = None
 
 
 PropertyStatus = Literal["available", "sold", "rented"]
@@ -849,8 +850,8 @@ def _set_cookies(response: Response, access_token: str, refresh_token: str):
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=IS_PRODUCTION,
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=900,
         path="/",
     )
@@ -859,8 +860,8 @@ def _set_cookies(response: Response, access_token: str, refresh_token: str):
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=IS_PRODUCTION,
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=604800,
         path="/",
     )
@@ -991,7 +992,6 @@ async def register(
 
     db.add(new_user)
 
-    # إنشاء اشتراك تجريبي مجاني لمدة 30 يومًا لكل مستخدم جديد
     trial_now = datetime.now(timezone.utc)
     trial_plan = PLAN_PRICING["trial"]
 
@@ -1024,7 +1024,10 @@ async def register(
 
     _set_cookies(response, access, refresh)
 
-    return await user_to_response(new_user, db)
+    resp = await user_to_response(new_user, db)
+    resp.access_token = access
+    resp.refresh_token = refresh
+    return resp
 
 
 @api_router.post("/auth/login", response_model=UserResponse)
@@ -1065,7 +1068,10 @@ async def login(
 
     _set_cookies(response, access, refresh)
 
-    return await user_to_response(user, db)
+    resp = await user_to_response(user, db)
+    resp.access_token = access
+    resp.refresh_token = refresh
+    return resp
 
 
 @api_router.post("/auth/refresh", response_model=UserResponse)
@@ -1121,7 +1127,10 @@ async def refresh_tokens(request: Request, response: Response, db: AsyncSession 
 
         _set_cookies(response, new_access, new_refresh)
 
-        return await user_to_response(user, db)
+        resp = await user_to_response(user, db)
+        resp.access_token = new_access
+        resp.refresh_token = new_refresh
+        return resp
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="انتهت صلاحية جلسة العمل")
@@ -1144,6 +1153,11 @@ async def logout(
     db: AsyncSession = Depends(get_db),
 ):
     refresh_token = request.cookies.get("refresh_token")
+
+    if not refresh_token:
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            refresh_token = auth_header[7:].strip()
 
     if refresh_token:
         try:
@@ -1306,7 +1320,6 @@ async def revoke_public_share(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    # Revocation remains available after a plan expires so owners can always close public access.
     prop = await _get_property_for_share_management(property_id, current_user, db)
     prop.public_share_token = None
     prop.public_contact_enabled = False
@@ -2182,7 +2195,6 @@ async def public_property_share_preview(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    """Serve crawler metadata, then send human visitors to the React property page."""
     check_rate_limit(f"public-property-preview:{_client_ip(request)}", limit=120, window_seconds=60)
     result = await db.execute(
         select(Property).where(Property.public_share_token == token).limit(1)
