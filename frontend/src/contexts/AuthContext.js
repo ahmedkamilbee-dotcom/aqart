@@ -7,7 +7,20 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 axios.defaults.withCredentials = true;
 
-// تجديد الجلسة تلقائياً: التوكن القصير (15 دقيقة) ينتهي، فنستدعي /auth/refresh مرة واحدة ثم نعيد الطلب
+// إضافة التوكن تلقائياً في رأس كل طلب يخرج من الموقع
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// تجديد الجلسة تلقائياً في الخلفية عند انتهاء التوكن (15 دقيقة) دون تسجيل خروج المستخدم
 let refreshPromise = null;
 axios.interceptors.response.use(
   (res) => res,
@@ -23,11 +36,40 @@ axios.interceptors.response.use(
 
     if (status === 401 && original && !original._retried && !isAuthCall) {
       original._retried = true;
+      const refreshToken = localStorage.getItem('refresh_token');
+
+      if (!refreshToken) {
+        localStorage.removeItem('access_token');
+        return Promise.reject(error);
+      }
+
       try {
-        refreshPromise = refreshPromise || axios.post(`${API}/auth/refresh`, {}, { withCredentials: true });
-        await refreshPromise;
+        refreshPromise =
+          refreshPromise ||
+          axios.post(
+            `${API}/auth/refresh`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${refreshToken}` },
+              withCredentials: true,
+            }
+          );
+
+        const { data } = await refreshPromise;
+
+        if (data?.access_token) {
+          localStorage.setItem('access_token', data.access_token);
+        }
+        if (data?.refresh_token) {
+          localStorage.setItem('refresh_token', data.refresh_token);
+        }
+
+        original.headers = original.headers || {};
+        original.headers.Authorization = `Bearer ${data.access_token || localStorage.getItem('access_token')}`;
         return axios(original);
       } catch (refreshError) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         return Promise.reject(error);
       } finally {
         refreshPromise = null;
@@ -42,8 +84,18 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const checkAuth = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      setUser(false);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { data } = await axios.get(`${API}/auth/me`, { withCredentials: true });
+      const { data } = await axios.get(`${API}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
       setUser(data);
     } catch (error) {
       setUser(false);
@@ -62,6 +114,12 @@ export const AuthProvider = ({ children }) => {
       { identifier, password },
       { withCredentials: true }
     );
+    if (data.access_token) {
+      localStorage.setItem('access_token', data.access_token);
+    }
+    if (data.refresh_token) {
+      localStorage.setItem('refresh_token', data.refresh_token);
+    }
     setUser(data);
     return data;
   };
@@ -77,18 +135,29 @@ export const AuthProvider = ({ children }) => {
       payload.office_name = officeName;
     }
 
-    const { data } = await axios.post(
-      `${API}/auth/register`,
-      payload,
-      { withCredentials: true }
-    );
+    const { data } = await axios.post(`${API}/auth/register`, payload, {
+      withCredentials: true,
+    });
+    if (data.access_token) {
+      localStorage.setItem('access_token', data.access_token);
+    }
+    if (data.refresh_token) {
+      localStorage.setItem('refresh_token', data.refresh_token);
+    }
     setUser(data);
     return data;
   };
 
   const logout = async () => {
-    await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
-    setUser(false);
+    try {
+      await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+    } catch (e) {
+      // تجاهل الخطأ في حال كانت الجلسة منتهية مسبقاً
+    } finally {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      setUser(false);
+    }
   };
 
   return (
