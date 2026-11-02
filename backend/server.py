@@ -552,6 +552,8 @@ class PropertyCreate(BaseModel):
     bathrooms: int = Field(ge=0)
     owner_name: Optional[str] = Field(default="", max_length=100)
     owner_phone: str = Field(min_length=7, max_length=20)
+    whatsapp_number: Optional[str] = Field(default=None, max_length=20)
+    instagram_username: Optional[str] = Field(default=None, max_length=100)
     images: Optional[List[str]] = Field(default_factory=list, max_length=MAX_IMAGES_PER_PROPERTY)
     status: PropertyStatus = "available"
     governorate: Optional[str] = Field(default=None, max_length=100)
@@ -567,6 +569,8 @@ class PropertyUpdate(BaseModel):
     bathrooms: Optional[int] = Field(default=None, ge=0)
     owner_name: Optional[str] = Field(default=None, max_length=100)
     owner_phone: Optional[str] = Field(default=None, min_length=7, max_length=20)
+    whatsapp_number: Optional[str] = Field(default=None, max_length=20)
+    instagram_username: Optional[str] = Field(default=None, max_length=100)
     images: Optional[List[str]] = Field(default=None, max_length=MAX_IMAGES_PER_PROPERTY)
     status: Optional[PropertyStatus] = None
     governorate: Optional[str] = Field(default=None, max_length=100)
@@ -583,6 +587,8 @@ class PropertyResponse(BaseModel):
     bathrooms: int
     owner_name: Optional[str] = ""
     owner_phone: str
+    whatsapp_number: Optional[str] = None
+    instagram_username: Optional[str] = None
     images: List[str]
     public_share_token: Optional[str] = None
     public_contact_enabled: bool = False
@@ -615,6 +621,8 @@ class PublicPropertyResponse(BaseModel):
     district: Optional[str] = None
     agent_name: str
     contact_phone: Optional[str] = None
+    whatsapp_number: Optional[str] = None
+    instagram_username: Optional[str] = None
     created_at: str
 
 
@@ -717,6 +725,8 @@ def prop_to_response(p: Property) -> PropertyResponse:
         bathrooms=p.bathrooms,
         owner_name=p.owner_name or "",
         owner_phone=p.owner_phone,
+        whatsapp_number=p.whatsapp_number,
+        instagram_username=p.instagram_username,
         images=p.images or [],
         public_share_token=p.public_share_token,
         public_contact_enabled=p.public_contact_enabled,
@@ -1344,6 +1354,8 @@ async def get_public_property(
         district=prop.district,
         agent_name=agent.name if agent else prop.agent_name,
         contact_phone=(agent.phone if agent and prop.public_contact_enabled else None),
+        whatsapp_number=(prop.whatsapp_number if prop.public_contact_enabled else None),
+        instagram_username=(prop.instagram_username if prop.public_contact_enabled else None),
         created_at=prop.created_at.isoformat() if prop.created_at else "",
     )
 
