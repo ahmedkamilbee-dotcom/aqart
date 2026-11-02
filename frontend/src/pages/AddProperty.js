@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { PROPERTY } from '../constants/testIds';
-import { ChevronLeft, ChevronRight, Home, DollarSign, Ruler, BedDouble, Upload, Phone, User, MapPin, XCircle, MessageCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, DollarSign, Ruler, BedDouble, Upload, Phone, User, MapPin, XCircle, MessageCircle, Instagram } from 'lucide-react';
 import { useSubscriptionStatus, SubscriptionBanner } from '../components/SubscriptionBanner';
 import { buildSupportWhatsAppUrl } from '../config/brand';
 import { IraqGovernoratePicker } from '../components/IraqGovernoratePicker';
@@ -37,6 +37,8 @@ export const AddProperty = () => {
     bathrooms: '',
     owner_name: '',
     owner_phone: '',
+    whatsapp_number: '',
+    instagram_username: '',
     governorate: '',
     district: '',
     images: [],
@@ -71,7 +73,7 @@ export const AddProperty = () => {
     }
     if (currentStep === 4) {
       if (!formData.owner_name || !formData.owner_phone) {
-        setError('يرجى إدخال جميع الحقول');
+        setError('يرجى إدخال اسم المالك ورقم الهاتف الأساسي');
         return;
       }
     }
@@ -128,6 +130,8 @@ export const AddProperty = () => {
         bathrooms: parseInt(formData.bathrooms),
         owner_name: formData.owner_name,
         owner_phone: formData.owner_phone,
+        whatsapp_number: formData.whatsapp_number.trim() || formData.owner_phone.trim(),
+        instagram_username: formData.instagram_username.trim(),
         governorate: formData.governorate,
         district: formData.district,
         images: formData.images,
@@ -312,7 +316,7 @@ export const AddProperty = () => {
             <div>
               <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
                 <User className="inline-block w-8 h-8 ml-2" />
-                اسم مالك العقار
+                اسم مالك العقار / اسم المكتب
               </label>
               <input
                 data-testid="property-owner-name-input"
@@ -320,13 +324,13 @@ export const AddProperty = () => {
                 value={formData.owner_name}
                 onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
                 className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-                placeholder="مثال: محمد أحمد"
+                placeholder="مثال: مكتب الفهد العقاري"
               />
             </div>
             <div>
               <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
                 <Phone className="inline-block w-8 h-8 ml-2" />
-                رقم هاتف مالك العقار
+                رقم الهاتف الأساسي للاتصال
               </label>
               <input
                 data-testid={PROPERTY.ownerPhoneInput}
@@ -334,7 +338,33 @@ export const AddProperty = () => {
                 value={formData.owner_phone}
                 onChange={(e) => setFormData({ ...formData, owner_phone: e.target.value })}
                 className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-                placeholder="مثال: 0501234567"
+                placeholder="مثال: 07701234567"
+              />
+            </div>
+            <div>
+              <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+                <MessageCircle className="inline-block w-8 h-8 ml-2 text-green-600" />
+                رقم الواتساب (اختياري)
+              </label>
+              <input
+                type="tel"
+                value={formData.whatsapp_number}
+                onChange={(e) => setFormData({ ...formData, whatsapp_number: e.target.value })}
+                className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+                placeholder="اتركه فارغاً إذا كان نفس رقم الهاتف أعلاه"
+              />
+            </div>
+            <div>
+              <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+                <Instagram className="inline-block w-8 h-8 ml-2 text-pink-600" />
+                حساب الإنستغرام (اختياري)
+              </label>
+              <input
+                type="text"
+                value={formData.instagram_username}
+                onChange={(e) => setFormData({ ...formData, instagram_username: e.target.value })}
+                className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+                placeholder="مثال: aqarat_baghdad أو رابط الحساب"
               />
             </div>
           </div>
@@ -423,72 +453,72 @@ export const AddProperty = () => {
         ) : (
           <>
             {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between mb-4">
-            {STEPS.map((step, idx) => (
-              <div
-                key={idx}
-                className={`flex-1 h-3 rounded-full mx-1 ${
-                  idx <= currentStep ? 'bg-[#1A5632]' : 'bg-[#D2CFC9]'
-                }`}
-              />
-            ))}
-          </div>
-          <p className="text-center text-2xl font-bold text-[#2B4736]">
-            الخطوة {currentStep + 1} من {STEPS.length}
-          </p>
-        </div>
-
-        {/* Form Card */}
-        <div className="bg-white border-2 border-[#D2CFC9] rounded-3xl p-8 sm:p-12 shadow-sm">
-          {error && (
-            <div className="mb-6 p-6 bg-red-50 border-2 border-red-500 rounded-2xl">
-              <p className="text-xl font-bold text-red-700">{error}</p>
+            <div className="mb-8">
+              <div className="flex justify-between mb-4">
+                {STEPS.map((step, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex-1 h-3 rounded-full mx-1 ${
+                      idx <= currentStep ? 'bg-[#1A5632]' : 'bg-[#D2CFC9]'
+                    }`}
+                  />
+                ))}
+              </div>
+              <p className="text-center text-2xl font-bold text-[#2B4736]">
+                الخطوة {currentStep + 1} من {STEPS.length}
+              </p>
             </div>
-          )}
 
-          {renderStep()}
+            {/* Form Card */}
+            <div className="bg-white border-2 border-[#D2CFC9] rounded-3xl p-8 sm:p-12 shadow-sm">
+              {error && (
+                <div className="mb-6 p-6 bg-red-50 border-2 border-red-500 rounded-2xl">
+                  <p className="text-xl font-bold text-red-700">{error}</p>
+                </div>
+              )}
 
-          {/* Navigation Buttons */}
-          <div className="mt-8 flex gap-4">
-            {currentStep > 0 && (
-              <button
-                data-testid={PROPERTY.prevButton}
-                onClick={handlePrev}
-                className="flex-1 min-h-[72px] bg-transparent border-4 border-[#1A5632] text-[#1A5632] rounded-2xl flex items-center justify-center gap-3 hover:bg-[#1A5632] hover:text-white transition-colors text-2xl font-black"
-              >
-                <ChevronRight className="w-10 h-10" />
-                السابق
-              </button>
-            )}
-            {currentStep < STEPS.length - 1 ? (
-              <button
-                data-testid={PROPERTY.nextButton}
-                onClick={handleNext}
-                className="flex-1 min-h-[72px] bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors shadow-[0_8px_0_#0F3820] active:translate-y-2 active:shadow-[0_0px_0_#0F3820] text-2xl font-black"
-              >
-                التالي
-                <ChevronLeft className="w-10 h-10" />
-              </button>
-            ) : (
-              <button
-                data-testid={PROPERTY.submitButton}
-                onClick={handleSubmit}
-                disabled={loading}
-                className="flex-1 min-h-[72px] bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors shadow-[0_8px_0_#0F3820] active:translate-y-2 active:shadow-[0_0px_0_#0F3820] text-2xl font-black disabled:opacity-50"
-              >
-                {loading ? 'جارٍ الحفظ...' : 'حفظ العقار'}
-              </button>
-            )}
-          </div>
+              {renderStep()}
 
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="w-full mt-6 text-xl font-bold text-[#1A5632] hover:text-[#0F3820] underline"
-          >
-            إلغاء والعودة
-          </button>
-        </div>
+              {/* Navigation Buttons */}
+              <div className="mt-8 flex gap-4">
+                {currentStep > 0 && (
+                  <button
+                    data-testid={PROPERTY.prevButton}
+                    onClick={handlePrev}
+                    className="flex-1 min-h-[72px] bg-transparent border-4 border-[#1A5632] text-[#1A5632] rounded-2xl flex items-center justify-center gap-3 hover:bg-[#1A5632] hover:text-white transition-colors text-2xl font-black"
+                  >
+                    <ChevronRight className="w-10 h-10" />
+                    السابق
+                  </button>
+                )}
+                {currentStep < STEPS.length - 1 ? (
+                  <button
+                    data-testid={PROPERTY.nextButton}
+                    onClick={handleNext}
+                    className="flex-1 min-h-[72px] bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors shadow-[0_8px_0_#0F3820] active:translate-y-2 active:shadow-[0_0px_0_#0F3820] text-2xl font-black"
+                  >
+                    التالي
+                    <ChevronLeft className="w-10 h-10" />
+                  </button>
+                ) : (
+                  <button
+                    data-testid={PROPERTY.submitButton}
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="flex-1 min-h-[72px] bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors shadow-[0_8px_0_#0F3820] active:translate-y-2 active:shadow-[0_0px_0_#0F3820] text-2xl font-black disabled:opacity-50"
+                  >
+                    {loading ? 'جارٍ الحفظ...' : 'حفظ العقار'}
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="w-full mt-6 text-xl font-bold text-[#1A5632] hover:text-[#0F3820] underline"
+              >
+                إلغاء والعودة
+              </button>
+            </div>
           </>
         )}
       </div>
