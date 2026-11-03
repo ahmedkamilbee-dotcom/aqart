@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   User,
+  Phone,
   Users,
   CalendarDays,
   BarChart3,
@@ -456,12 +457,28 @@ export const PropertyListPage = ({ status, testid }) => {
                       <span className="text-xl font-bold">{property.bathrooms}</span>
                     </div>
                   </div>
-                  {property.owner_name && (
-                    <div className="flex items-center gap-2 mb-3">
-                      <User className="w-6 h-6 text-[#1A5632]" />
-                      <span className="text-lg font-bold text-[#0A1F13]">
-                        المعلن: {property.owner_name}
-                      </span>
+                  {(property.owner_name || property.owner_phone) && (
+                    <div className="mb-4 rounded-2xl border-2 border-[#D2CFC9] bg-[#F9F6F0] p-4">
+                      <div className="flex items-center gap-2">
+                        <User className="h-6 w-6 text-[#1A5632]" />
+                        <div>
+                          <span className="block text-sm font-bold text-[#2B4736]">صاحب العقار</span>
+                          <span className="text-lg font-extrabold text-[#0A1F13]">
+                            {property.owner_name || 'غير محدد'}
+                          </span>
+                        </div>
+                      </div>
+                      {property.owner_phone && (
+                        <a
+                          href={`tel:${property.owner_phone}`}
+                          className="mt-3 flex min-h-12 flex-wrap items-center gap-2 rounded-xl bg-white px-3 py-2 text-[#1A5632] shadow-sm hover:bg-green-50"
+                          aria-label={`اتصال بصاحب العقار ${property.owner_name || ''} على ${property.owner_phone}`}
+                        >
+                          <Phone className="h-5 w-5" />
+                          <span className="text-lg font-black" dir="ltr">{property.owner_phone}</span>
+                          <span className="ms-auto text-sm font-extrabold">اتصال مباشر</span>
+                        </a>
+                      )}
                     </div>
                   )}
                   <div className="mt-3">

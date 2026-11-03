@@ -12,6 +12,7 @@ import {
   Ruler,
   BedDouble,
   Phone,
+  User,
   Upload,
   Save,
   ArrowRight,
@@ -306,33 +307,35 @@ export const EditProperty = () => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
-              <Phone className="inline-block w-8 h-8 ml-2" />
-              اسم مالك العقار / المكتب
-            </label>
-            <input
-              data-testid="property-owner-name-input"
-              type="text"
-              value={formData.owner_name}
-              onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
-              className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-              placeholder="اسم المالك أو المكتب"
-            />
-          </div>
-
-          <div>
-            <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
-              <Phone className="inline-block w-8 h-8 ml-2" />
-              رقم الهاتف الأساسي
-            </label>
-            <input
-              data-testid={PROPERTY.ownerPhoneInput}
-              type="tel"
-              value={formData.owner_phone}
-              onChange={(e) => setFormData({ ...formData, owner_phone: e.target.value })}
-              className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-            />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+                <User className="inline-block w-8 h-8 ml-2" />
+                اسم صاحب العقار / المكتب
+              </label>
+              <input
+                data-testid="property-owner-name-input"
+                type="text"
+                value={formData.owner_name}
+                onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
+                className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+                placeholder="اسم المالك أو المكتب"
+              />
+            </div>
+            <div>
+              <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
+                <Phone className="inline-block w-8 h-8 ml-2" />
+                رقم هاتف صاحب العقار
+              </label>
+              <input
+                data-testid={PROPERTY.ownerPhoneInput}
+                type="tel"
+                value={formData.owner_phone}
+                onChange={(e) => setFormData({ ...formData, owner_phone: e.target.value })}
+                className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
+                placeholder="مثال: 07701234567"
+              />
+            </div>
           </div>
 
           <div>

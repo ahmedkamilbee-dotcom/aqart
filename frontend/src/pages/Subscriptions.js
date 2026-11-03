@@ -63,7 +63,12 @@ export const Subscriptions = () => {
     return Math.ceil((d - now) / (1000 * 60 * 60 * 24));
   };
 
-  const activeSub = mySubs.find((s) => s.status === 'active');
+  const hasReceivedTrial = mySubs.some((sub) => sub.plan_type === 'trial');
+  const visiblePlans = plans.filter((plan) => plan.plan_type !== 'trial' || !hasReceivedTrial);
+  const visibleSubs = mySubs.filter(
+    (sub) => !(sub.plan_type === 'trial' && sub.status === 'expired')
+  );
+  const activeSub = visibleSubs.find((sub) => sub.status === 'active');
 
   const planLabelFor = (type) => {
     if (type === 'trial') return 'تجربة مجانية';
@@ -141,7 +146,7 @@ export const Subscriptions = () => {
           <p className="text-2xl font-bold text-[#2B4736]">جارٍ التحميل...</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            {plans.map((plan) => {
+            {visiblePlans.map((plan) => {
               const Icon = PLAN_ICONS[plan.plan_type] || Star;
               const label = plan.label || planLabelFor(plan.plan_type);
               const isTrial = plan.plan_type === 'trial' || plan.amount === 0;
@@ -205,13 +210,13 @@ export const Subscriptions = () => {
 
         {/* History */}
         <h2 className="text-3xl font-black text-[#0A1F13] mb-4">سجل الاشتراكات</h2>
-        {mySubs.length === 0 ? (
+        {visibleSubs.length === 0 ? (
           <div className="bg-white border-2 border-[#D2CFC9] rounded-3xl p-8 text-center">
             <p className="text-2xl font-bold text-[#2B4736]">لا توجد اشتراكات سابقة</p>
           </div>
         ) : (
           <div className="space-y-3" data-testid="subscriptions-history">
-            {mySubs.map((sub) => (
+            {visibleSubs.map((sub) => (
               <div
                 key={sub.id}
                 className="bg-white border-2 border-[#D2CFC9] rounded-2xl p-5 flex items-center justify-between flex-wrap gap-3"

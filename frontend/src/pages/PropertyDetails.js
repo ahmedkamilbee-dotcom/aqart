@@ -463,7 +463,7 @@ export const PropertyDetails = () => {
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
               <div className="flex items-center gap-3 mb-2">
                 <User className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">اسم صاحب الإعلان / المكتب</span>
+                <span className="text-2xl font-bold text-[#2B4736]">اسم صاحب العقار / المكتب</span>
               </div>
               <p
                 className="text-3xl font-black text-[#0A1F13]"
@@ -476,7 +476,7 @@ export const PropertyDetails = () => {
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
               <div className="flex items-center gap-3 mb-2">
                 <Phone className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">رقم الهاتف</span>
+                <span className="text-2xl font-bold text-[#2B4736]">رقم هاتف صاحب العقار</span>
               </div>
               <a
                 href={`tel:${property.owner_phone}`}
