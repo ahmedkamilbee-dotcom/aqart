@@ -47,18 +47,23 @@ export const PropertyDetails = () => {
   const [revokePending, setRevokePending] = useState(false);
 
   useEffect(() => {
+    let active = true;
     const fetchProperty = async () => {
       try {
-        const { data } = await axios.get(`${API}/properties/${id}`, { withCredentials: true });
-        setProperty(data);
+        const path = user
+          ? `/properties/${encodeURIComponent(id)}`
+          : `/public/properties/by-id/${encodeURIComponent(id)}`;
+        const { data } = await axios.get(`${API}${path}`, { withCredentials: Boolean(user) });
+        if (active) setProperty(data);
       } catch (err) {
-        setError(err.response?.data?.detail || 'تعذر تحميل تفاصيل العقار');
+        if (active) setError(err.response?.data?.detail || 'تعذر تحميل تفاصيل العقار');
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
     fetchProperty();
-  }, [id]);
+    return () => { active = false; };
+  }, [id, user]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -160,7 +165,7 @@ export const PropertyDetails = () => {
 
   // معالجة رابط الواتساب التفاعلي
   const getDirectWhatsAppLink = () => {
-    const rawNumber = property.whatsapp_number || property.owner_phone;
+    const rawNumber = property.whatsapp_number || property.owner_phone || property.contact_phone;
     if (!rawNumber) return null;
     let cleanNumber = rawNumber.replace(/[^0-9]/g, '');
     if (cleanNumber.startsWith('07')) {
@@ -226,6 +231,7 @@ export const PropertyDetails = () => {
 
   const directWhatsAppUrl = getDirectWhatsAppLink();
   const directInstagramUrl = getInstagramLink();
+  const contactPhone = property.owner_phone || property.contact_phone;
 
   return (
     <div
@@ -333,7 +339,8 @@ export const PropertyDetails = () => {
             </span>
           </div>
 
-          {/* أزرار التواصل المباشرة الموجهة للزبائن */}
+          {/* أزرار التواصل المباشرة المسموح بعرضها للعقار */}
+          {(directWhatsAppUrl || directInstagramUrl || contactPhone) && (
           <div className="my-8 p-6 bg-[#F9F6F0] rounded-3xl border-2 border-[#D2CFC9]">
             <h3 className="text-2xl font-black text-[#0A1F13] mb-4 text-center sm:text-right">
               تواصل مع المعلن مباشرة:
@@ -353,9 +360,9 @@ export const PropertyDetails = () => {
               )}
 
               {/* زر اتصال هاتفي */}
-              {property.owner_phone && (
+              {contactPhone && (
                 <a
-                  href={`tel:${property.owner_phone}`}
+                  href={`tel:${contactPhone}`}
                   className="min-h-[64px] px-6 bg-[#1A5632] text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-[#0F3820] transition-colors text-xl font-black shadow-md"
                 >
                   <Phone className="w-8 h-8" />
@@ -377,6 +384,7 @@ export const PropertyDetails = () => {
               )}
             </div>
           </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
@@ -460,37 +468,44 @@ export const PropertyDetails = () => {
               </p>
             </div>
 
-            <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
-              <div className="flex items-center gap-3 mb-2">
-                <User className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">اسم صاحب العقار / المكتب</span>
+            {property.owner_name && (
+              <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
+                <div className="flex items-center gap-3 mb-2">
+                  <User className="w-10 h-10 text-[#1A5632]" />
+                  <span className="text-2xl font-bold text-[#2B4736]">اسم صاحب العقار</span>
+                </div>
+                <p
+                  className="text-3xl font-black text-[#0A1F13]"
+                  data-testid="property-detail-owner-name"
+                >
+                  {property.owner_name}
+                </p>
               </div>
-              <p
-                className="text-3xl font-black text-[#0A1F13]"
-                data-testid="property-detail-owner-name"
-              >
-                {property.owner_name || 'غير محدد'}
-              </p>
-            </div>
+            )}
 
-            <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
-              <div className="flex items-center gap-3 mb-2">
-                <Phone className="w-10 h-10 text-[#1A5632]" />
-                <span className="text-2xl font-bold text-[#2B4736]">رقم هاتف صاحب العقار</span>
+            {contactPhone && (
+              <div className="bg-[#F9F6F0] rounded-2xl p-6 border-2 border-[#D2CFC9]">
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className="w-10 h-10 text-[#1A5632]" />
+                  <span className="text-2xl font-bold text-[#2B4736]">
+                    {property.owner_phone ? 'رقم هاتف صاحب العقار' : 'رقم التواصل'}
+                  </span>
+                </div>
+                <a
+                  href={`tel:${contactPhone}`}
+                  className="text-3xl font-black text-[#1A5632] hover:underline"
+                  data-testid="property-detail-owner-phone"
+                  dir="ltr"
+                >
+                  {contactPhone}
+                </a>
               </div>
-              <a
-                href={`tel:${property.owner_phone}`}
-                className="text-3xl font-black text-[#1A5632] hover:underline"
-                data-testid="property-detail-owner-phone"
-                dir="ltr"
-              >
-                {property.owner_phone}
-              </a>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Agent Info */}
+        {user && property.agent_name && (
         <div className="bg-white border-2 border-[#D2CFC9] rounded-3xl p-8">
           <div className="flex items-center gap-4">
             <User className="w-16 h-16 text-[#1A5632]" />
@@ -505,6 +520,7 @@ export const PropertyDetails = () => {
             </div>
           </div>
         </div>
+        )}
 
         {shareOpen && (
           <div className="print-share-overlay fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4" onMouseDown={(event) => { if (event.target === event.currentTarget) setShareOpen(false); }}>

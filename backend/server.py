@@ -633,6 +633,28 @@ class PublicPropertyResponse(BaseModel):
     created_at: str
 
 
+class PublicPropertyListItem(BaseModel):
+    id: str
+    total_area: float
+    price: float
+    front_width: float
+    length: float
+    bedrooms: int
+    bathrooms: int
+    images: List[str]
+    status: str
+    governorate: Optional[str] = None
+    district: Optional[str] = None
+    created_at: str
+
+
+class PublicPropertyPageResponse(BaseModel):
+    items: List[PublicPropertyListItem]
+    total: int
+    skip: int
+    limit: int
+
+
 class PublicShareRequest(BaseModel):
     include_agent_phone: bool = False
 
@@ -1336,6 +1358,74 @@ async def revoke_public_share(
     return {"message": "تم إيقاف رابط المشاركة"}
 
 
+@api_router.get("/public/properties/page", response_model=PublicPropertyPageResponse)
+async def get_public_properties_page(
+    request: Request,
+    q: Optional[str] = Query(default=None, max_length=200),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(30, ge=1, le=100),
+    governorate: Optional[str] = Query(default=None, max_length=100),
+    district: Optional[str] = Query(default=None, max_length=100),
+    db: AsyncSession = Depends(get_db),
+):
+    """Public catalog for available properties; excludes all owner and agent contact fields."""
+    check_rate_limit(f"public-property-list:{_client_ip(request)}", limit=120, window_seconds=60)
+    conditions = [Property.status == "available"]
+
+    if governorate and governorate.strip():
+        conditions.append(Property.governorate.ilike(f"%{_like_escape(governorate.strip())}%", escape="\\"))
+    if district and district.strip():
+        conditions.append(Property.district.ilike(f"%{_like_escape(district.strip())}%", escape="\\"))
+    if q and q.strip():
+        pattern = f"%{_like_escape(q.strip())}%"
+        conditions.append(or_(
+            Property.governorate.ilike(pattern, escape="\\"),
+            Property.district.ilike(pattern, escape="\\"),
+            cast(Property.price, Text).ilike(pattern, escape="\\"),
+            cast(Property.total_area, Text).ilike(pattern, escape="\\"),
+        ))
+
+    count_result = await db.execute(
+        select(func.count(Property.id)).where(and_(*conditions))
+    )
+    rows_result = await db.execute(
+        select(Property)
+        .where(and_(*conditions))
+        .order_by(Property.created_at.desc(), Property.id.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+
+    items = []
+    for prop in rows_result.scalars().all():
+        image_paths = await _verified_property_image_paths(prop, db)
+        items.append(PublicPropertyListItem(
+            id=prop.id,
+            total_area=prop.total_area,
+            price=prop.price,
+            front_width=prop.front_width,
+            length=prop.length,
+            bedrooms=prop.bedrooms,
+            bathrooms=prop.bathrooms,
+            images=[
+                f"/api/public/listing-images/{quote(prop.id, safe='')}/{index}"
+                for index, image_path in enumerate(image_paths)
+                if image_path
+            ],
+            status=prop.status,
+            governorate=prop.governorate,
+            district=prop.district,
+            created_at=prop.created_at.isoformat() if prop.created_at else "",
+        ))
+
+    return PublicPropertyPageResponse(
+        items=items,
+        total=count_result.scalar_one() or 0,
+        skip=skip,
+        limit=limit,
+    )
+
+
 @api_router.get("/public/properties/{token}", response_model=PublicPropertyResponse)
 async def get_public_property(
     token: str,
@@ -1382,6 +1472,58 @@ async def get_public_property(
     )
 
 
+@api_router.get("/public/properties/by-id/{property_id}", response_model=PublicPropertyResponse)
+async def get_public_property_by_id(
+    property_id: str,
+    request: Request,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only public details for an available listing, with contacts only when opted in."""
+    check_rate_limit(f"public-property:{_client_ip(request)}", limit=120, window_seconds=60)
+    result = await db.execute(
+        select(Property).where(
+            and_(Property.id == property_id, Property.status == "available")
+        ).limit(1)
+    )
+    prop = result.scalars().first()
+    if not prop:
+        raise HTTPException(status_code=404, detail="العقار غير متاح للعرض العام")
+
+    image_paths = await _verified_property_image_paths(prop, db)
+    agent = None
+    if prop.public_contact_enabled:
+        agent_result = await db.execute(
+            select(User.name, User.phone).where(User.id == prop.agent_id).limit(1)
+        )
+        agent = agent_result.first()
+
+    response.headers["Cache-Control"] = "private, no-store"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return PublicPropertyResponse(
+        id=prop.id,
+        total_area=prop.total_area,
+        price=prop.price,
+        front_width=prop.front_width,
+        length=prop.length,
+        bedrooms=prop.bedrooms,
+        bathrooms=prop.bathrooms,
+        images=[
+            f"/api/public/listing-images/{quote(prop.id, safe='')}/{index}"
+            for index, image_path in enumerate(image_paths)
+            if image_path
+        ],
+        status=prop.status,
+        governorate=prop.governorate,
+        district=prop.district,
+        agent_name=agent.name if agent else "",
+        contact_phone=(agent.phone if agent else None),
+        whatsapp_number=(prop.whatsapp_number if prop.public_contact_enabled else None),
+        instagram_username=(prop.instagram_username if prop.public_contact_enabled else None),
+        created_at=prop.created_at.isoformat() if prop.created_at else "",
+    )
+
+
 @api_router.get("/public/properties/{token}/images/{image_index}")
 async def get_public_property_image(
     token: str,
@@ -1419,6 +1561,52 @@ async def get_public_property_image(
         media_type=media_type,
         headers={
             "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@api_router.get("/public/listing-images/{property_id}/{image_index}")
+async def get_public_listing_image(
+    property_id: str,
+    image_index: int,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    check_rate_limit(f"public-listing-image:{_client_ip(request)}", limit=120, window_seconds=60)
+    result = await db.execute(
+        select(Property).where(
+            and_(Property.id == property_id, Property.status == "available")
+        ).limit(1)
+    )
+    prop = result.scalars().first()
+    if not prop:
+        raise HTTPException(status_code=404, detail="الصورة غير متاحة")
+
+    image_paths = await _verified_property_image_paths(prop, db)
+    if image_index < 0 or image_index >= len(image_paths) or not image_paths[image_index]:
+        raise HTTPException(status_code=404, detail="الصورة غير متاحة")
+    storage_path = image_paths[image_index]
+    file_result = await db.execute(
+        select(FileRecord).where(
+            FileRecord.storage_path == storage_path,
+            FileRecord.user_id == prop.agent_id,
+            FileRecord.is_deleted.is_(False),
+        ).limit(1)
+    )
+    file_record = file_result.scalars().first()
+    if not file_record:
+        raise HTTPException(status_code=404, detail="الصورة غير متاحة")
+
+    image_data, _ = await get_object(storage_path, file_record.storage_provider or "emergent")
+    media_type = file_record.content_type or "application/octet-stream"
+    if media_type not in {"image/jpeg", "image/png", "image/webp"}:
+        raise HTTPException(status_code=404, detail="الصورة غير متاحة")
+    return Response(
+        content=image_data,
+        media_type=media_type,
+        headers={
+            "Cache-Control": "private, no-store",
             "X-Content-Type-Options": "nosniff",
         },
     )

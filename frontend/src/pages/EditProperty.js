@@ -311,7 +311,7 @@ export const EditProperty = () => {
             <div>
               <label className="block text-2xl font-extrabold text-[#0A1F13] mb-3">
                 <User className="inline-block w-8 h-8 ml-2" />
-                اسم صاحب العقار / المكتب
+                اسم صاحب العقار
               </label>
               <input
                 data-testid="property-owner-name-input"
@@ -319,7 +319,7 @@ export const EditProperty = () => {
                 value={formData.owner_name}
                 onChange={(e) => setFormData({ ...formData, owner_name: e.target.value })}
                 className="w-full min-h-[64px] text-2xl p-4 rounded-xl border-2 border-[#D2CFC9] focus:border-[#1A5632] focus:ring-4 focus:ring-[#1A5632]/20 outline-none font-semibold"
-                placeholder="اسم المالك أو المكتب"
+                placeholder="مثال: أحمد علي"
               />
             </div>
             <div>

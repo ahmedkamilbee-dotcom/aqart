@@ -65,25 +65,10 @@ export const PropertyListPage = ({ status, testid }) => {
         if (governorateFilter.trim()) params.set('governorate', governorateFilter.trim());
         if (districtFilter.trim()) params.set('district', districtFilter.trim());
 
-        let resData = null;
-        try {
-          const res = await axios.get(`${API}/properties/page?${params.toString()}`, {
-            withCredentials: true,
-          });
-          resData = res.data;
-        } catch (pageErr) {
-          // محاولة بديلة إذا كان السيرفر يعتمد مسار /properties العام
-          if (pageErr.response?.status === 404) {
-            const fallbackRes = await axios.get(`${API}/properties?${params.toString()}`, {
-              withCredentials: true,
-            });
-            resData = Array.isArray(fallbackRes.data)
-              ? { items: fallbackRes.data, total: fallbackRes.data.length }
-              : fallbackRes.data;
-          } else {
-            throw pageErr;
-          }
-        }
+        const listPath = user ? '/properties/page' : '/public/properties/page';
+        const { data: resData } = await axios.get(`${API}${listPath}?${params.toString()}`, {
+          withCredentials: Boolean(user),
+        });
 
         if (active) {
           const items = Array.isArray(resData?.items)
@@ -96,15 +81,9 @@ export const PropertyListPage = ({ status, testid }) => {
         }
       } catch (error) {
         if (active) {
-          // إذا كان الزائر غير مسجل أو السيرفر رفض التوثيق، لا نظهر رسالة خطأ مزعجة
-          if (error.response?.status === 401 || !user) {
-            setProperties([]);
-            setTotal(0);
-          } else {
-            setListError(error.response?.data?.detail || 'تعذر تحميل العقارات. حاول مجدداً.');
-            setProperties([]);
-            setTotal(0);
-          }
+          setListError(error.response?.data?.detail || 'تعذر تحميل العقارات. حاول مجدداً.');
+          setProperties([]);
+          setTotal(0);
         }
       } finally {
         if (active) setLoading(false);
@@ -133,26 +112,16 @@ export const PropertyListPage = ({ status, testid }) => {
       if (governorateFilter.trim()) params.set('governorate', governorateFilter.trim());
       if (districtFilter.trim()) params.set('district', districtFilter.trim());
 
-      let resData = null;
-      try {
-        const res = await axios.get(`${API}/properties/page?${params.toString()}`, { withCredentials: true });
-        resData = res.data;
-      } catch (err) {
-        if (err.response?.status === 404) {
-          const fallbackRes = await axios.get(`${API}/properties?${params.toString()}`, { withCredentials: true });
-          resData = Array.isArray(fallbackRes.data) ? { items: fallbackRes.data, total: fallbackRes.data.length } : fallbackRes.data;
-        } else {
-          throw err;
-        }
-      }
+      const listPath = user ? '/properties/page' : '/public/properties/page';
+      const { data: resData } = await axios.get(`${API}${listPath}?${params.toString()}`, {
+        withCredentials: Boolean(user),
+      });
 
       const newItems = Array.isArray(resData?.items) ? resData.items : Array.isArray(resData) ? resData : [];
       setProperties((current) => [...current, ...newItems]);
       setTotal(resData?.total !== undefined ? resData.total : properties.length + newItems.length);
     } catch (error) {
-      if (user) {
-        setListError(error.response?.data?.detail || 'تعذر تحميل بقية العقارات. حاول مجدداً.');
-      }
+      setListError(error.response?.data?.detail || 'تعذر تحميل بقية العقارات. حاول مجدداً.');
     } finally {
       setLoadingMore(false);
     }
@@ -457,7 +426,7 @@ export const PropertyListPage = ({ status, testid }) => {
                       <span className="text-xl font-bold">{property.bathrooms}</span>
                     </div>
                   </div>
-                  {(property.owner_name || property.owner_phone) && (
+                  {user && (property.owner_name || property.owner_phone) && (
                     <div className="mb-4 rounded-2xl border-2 border-[#D2CFC9] bg-[#F9F6F0] p-4">
                       <div className="flex items-center gap-2">
                         <User className="h-6 w-6 text-[#1A5632]" />
@@ -471,6 +440,7 @@ export const PropertyListPage = ({ status, testid }) => {
                       {property.owner_phone && (
                         <a
                           href={`tel:${property.owner_phone}`}
+                          onClick={(event) => event.stopPropagation()}
                           className="mt-3 flex min-h-12 flex-wrap items-center gap-2 rounded-xl bg-white px-3 py-2 text-[#1A5632] shadow-sm hover:bg-green-50"
                           aria-label={`اتصال بصاحب العقار ${property.owner_name || ''} على ${property.owner_phone}`}
                         >
