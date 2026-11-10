@@ -8,8 +8,8 @@
     "emoji": "👔",
     "xp": 5,
     "tasks_done": 1,
-    "status": "idle",
-    "task": "",
+    "status": "working",
+    "task": "محطة الصدى: نسخة المحقق علي",
     "queue": [],
     "skills": [
       "hq-task",
@@ -132,8 +132,8 @@
       "emoji": "🎨",
       "xp": 25,
       "tasks_done": 1,
-      "status": "idle",
-      "task": "",
+      "status": "working",
+      "task": "تصاعد الرعب: الطريق المظلم للمحطة",
       "queue": [],
       "skills": [
         "rtl-page"
@@ -147,8 +147,8 @@
       "emoji": "🧭",
       "xp": 25,
       "tasks_done": 1,
-      "status": "idle",
-      "task": "",
+      "status": "working",
+      "task": "لعب التحقيق: مسارح الجرائم والأدلة",
       "queue": [],
       "skills": [
         "sunday-meeting"
@@ -175,8 +175,8 @@
       "emoji": "✍️",
       "xp": 35,
       "tasks_done": 1,
-      "status": "idle",
-      "task": "",
+      "status": "working",
+      "task": "سيناريو علي: الهور للمحطة والتحويلة",
       "queue": [],
       "skills": [
         "property-listing-copy"
