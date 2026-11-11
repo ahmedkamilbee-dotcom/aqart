@@ -38,6 +38,7 @@ footer{padding-block:24px 40px;font-size:13px;color:var(--mute);border-top:1px s
 
 <script>
 const FR=[
+ {id:"wake",n:0,t:"00:00 – 03:00",title:"الصحوة",cap:"أول شي باللعبة. علي يفتح عيونه وهو واگع على كونكريت مبلول، وخده على الأرض. گلوب واحد يرمش فوگ، وباب حديد نص مفتوح يطلع منه ضوء نيون. على الأرض، يم إيده، ساعته واقفة على 4:52، ومسجّل صغير بعده يلف.",note:"اللاعب ما يعرف وين هو ولا ليش. والصورة مايلة لأن الراس على الأرض."},
  {id:"bridge",n:1,t:"00:00 – 02:30",title:"الجسر العايم",cap:"الجسر المضروب من 1991 واگع بالنهر، والسيارة تعبر على جسر عايم جنبه. بالماي، انعكاس الجسر سليم، وعليه سيارة بضوايها تمشي بلا صوت.",note:"الألوان: أسود مزرق، وضباب حليبي، وضوء أصفر خافت."},
  {id:"car",n:2,t:"02:30 – 05:30",title:"وحده بالسيارة",cap:"خلف راح يجيب بنزين. قدّام السيارة، سيارة عاطلة إشاراتها ترمش ثلاث ثلاث، ولافتة أم الشويچ مكتوب جنبها \"مكتوم\". وبرمشة وحدة، شي أسود أطول من العمود.",note:"الضوء البرتقالي الوحيد هو الإشارات. وعلى الطبلون ضو المسجّل الأحمر."},
  {id:"levee",n:3,t:"05:30 – 07:15",title:"درب الساتر",cap:"قناة ناشفة مفطّرة، وحزم قصب واگفة مثل ناس ظهرهم إلك. نبضة الصدى ترسمها بخطوط خضرة، وواحد منهم يميّل راسه يمين.",note:"أول مرة يشوف اللاعب النبضة. الأخضر هو لون الصوت."},
@@ -60,6 +61,44 @@ function vignette(c,s){const g=c.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,W*.7
 function reeds(c,base,n,hmin,hmax,col,lw){c.strokeStyle=col;for(let i=0;i<n;i++){const x=R()*W,h=hmin+R()*(hmax-hmin),l=(R()-.5)*.35;c.lineWidth=lw*(0.6+R());c.beginPath();c.moveTo(x,base+R()*12);c.quadraticCurveTo(x+l*h*.5,base-h*.6,x+l*h,base-h);c.stroke()}}
 function glow(c,x,y,r,col){const g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2)}
 function person(c,x,y,s,col){c.fillStyle=col;c.beginPath();c.arc(x,y-170*s,22*s,0,7);c.fill();c.beginPath();c.moveTo(x-38*s,y);c.quadraticCurveTo(x-46*s,y-110*s,x-26*s,y-145*s);c.lineTo(x+26*s,y-145*s);c.quadraticCurveTo(x+46*s,y-110*s,x+38*s,y);c.closePath();c.fill()}
+
+/* ---------- 0. wake ---------- */
+(function(){const c=ctx('wake');seed=5;
+ c.fillStyle='#050706';c.fillRect(0,0,W,H);
+ c.save();c.translate(W/2,H/2);c.rotate(-0.42);c.translate(-W/2,-H/2);
+ // wall + door with neon light
+ c.fillStyle='#141b17';c.fillRect(-300,-300,W+600,560);
+ c.fillStyle='rgba(46,74,58,.55)';c.fillRect(-300,150,W+600,110);
+ c.fillStyle='#0b0f0d';c.fillRect(760,-40,230,300);
+ c.fillStyle='#000';c.fillRect(790,-20,170,280);
+ c.fillStyle='rgba(205,245,225,.85)';c.beginPath();c.moveTo(790,-20);c.lineTo(840,-20);c.lineTo(840,260);c.lineTo(790,260);c.fill();
+ glow(c,815,140,300,'rgba(170,230,200,.22)');
+ c.fillStyle='#1d1612';c.beginPath();c.moveTo(840,-20);c.lineTo(960,10);c.lineTo(960,250);c.lineTo(840,260);c.fill();
+ // floor plane (wet concrete), close to camera
+ c.fillStyle=grad(c,260,H+400,[[0,'#151a17'],[1,'#070908']]);c.fillRect(-300,260,W+600,900);
+ // light spill from door onto floor
+ c.fillStyle='rgba(170,230,200,.10)';c.beginPath();c.moveTo(790,260);c.lineTo(840,260);c.lineTo(1100,900);c.lineTo(500,900);c.fill();
+ // puddles reflecting bulb
+ c.fillStyle='rgba(60,90,80,.35)';c.beginPath();c.ellipse(420,420,260,40,0,0,7);c.fill();
+ glow(c,430,418,70,'rgba(255,230,170,.35)');
+ // bulb (hanging)
+ c.strokeStyle='#050605';c.lineWidth=2;c.beginPath();c.moveTo(430,-300);c.lineTo(430,10);c.stroke();
+ glow(c,430,22,180,'rgba(255,225,160,.45)');c.fillStyle='rgba(255,236,190,1)';c.beginPath();c.arc(430,22,11,0,7);c.fill();
+ // watch on floor
+ c.fillStyle='#0d0f0e';c.beginPath();c.ellipse(560,560,60,22,0,0,7);c.fill();
+ c.fillStyle='#cfc9b7';c.beginPath();c.ellipse(560,552,36,13,0,0,7);c.fill();
+ c.strokeStyle='#111';c.lineWidth=2;c.beginPath();c.moveTo(560,552);c.lineTo(572,546);c.stroke();c.beginPath();c.moveTo(560,552);c.lineTo(548,556);c.stroke();
+ // small recorder, spools
+ c.fillStyle='#232825';c.fillRect(260,520,150,60);c.fillStyle='#121513';c.fillRect(276,532,48,30);c.fillRect(342,532,48,30);
+ c.strokeStyle='#8f9a8a';c.lineWidth=2;[300,366].forEach(x=>{c.beginPath();c.arc(x,547,10,0,7);c.stroke()});
+ glow(c,398,528,16,'rgba(255,40,20,.95)');
+ // Ali's hand on the floor (foreground)
+ c.fillStyle='#0a0b0a';c.beginPath();c.moveTo(-100,760);c.quadraticCurveTo(150,640,330,660);c.quadraticCurveTo(380,668,372,690);c.quadraticCurveTo(250,720,-100,900);c.fill();
+ c.restore();
+ // eyelids / blur edges
+ const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,0,0,.95)');g.addColorStop(.18,'rgba(0,0,0,0)');g.addColorStop(.82,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.95)');c.fillStyle=g;c.fillRect(0,0,W,H);
+ vignette(c,.9);grain(c,20);
+})();
 
 /* ---------- 1. bridge ---------- */
 (function(){const c=ctx('bridge');seed=11;
