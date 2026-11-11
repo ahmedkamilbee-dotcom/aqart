@@ -145,10 +145,10 @@
       "title": "مدير المنتج",
       "dept": "المنتج والتصميم",
       "emoji": "🧭",
-      "xp": 50,
-      "tasks_done": 2,
-      "status": "working",
-      "task": "تصميم ديمو محطة الصدى بـ Unity",
+      "xp": 110,
+      "tasks_done": 3,
+      "status": "idle",
+      "task": "",
       "queue": [],
       "skills": [
         "sunday-meeting"
