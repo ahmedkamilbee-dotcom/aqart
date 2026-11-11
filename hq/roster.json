@@ -1,0 +1,240 @@
+{
+  "company": "عقاراتي",
+  "ceo": {
+    "id": "ceo",
+    "name": "Claude",
+    "title": "المدير التنفيذي",
+    "dept": "الإدارة",
+    "emoji": "👔",
+    "xp": 85,
+    "tasks_done": 11,
+    "status": "idle",
+    "task": "",
+    "queue": [],
+    "skills": [
+      "hq-task",
+      "morning-brief",
+      "sunday-meeting",
+      "hire"
+    ]
+  },
+  "team": [
+    {
+      "id": "frontend-dev",
+      "name": "ليث",
+      "title": "مطوّر واجهات React",
+      "dept": "الهندسة",
+      "emoji": "🖥️",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "rtl-page",
+        "release-check"
+      ]
+    },
+    {
+      "id": "backend-dev",
+      "name": "نور",
+      "title": "مطوّرة خادم FastAPI",
+      "dept": "الهندسة",
+      "emoji": "⚙️",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "api-endpoint",
+        "release-check"
+      ]
+    },
+    {
+      "id": "db-engineer",
+      "name": "حيدر",
+      "title": "مهندس قاعدة البيانات (Supabase)",
+      "dept": "الهندسة",
+      "emoji": "🗄️",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "supabase-migration"
+      ]
+    },
+    {
+      "id": "security-auditor",
+      "name": "زينب",
+      "title": "مدقّقة الأمان",
+      "dept": "الهندسة",
+      "emoji": "🛡️",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "security-check"
+      ]
+    },
+    {
+      "id": "qa-tester",
+      "name": "علي",
+      "title": "مختبر الجودة",
+      "dept": "الهندسة",
+      "emoji": "🧪",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "release-check"
+      ]
+    },
+    {
+      "id": "devops",
+      "name": "مصطفى",
+      "title": "مهندس النشر والتشغيل",
+      "dept": "الهندسة",
+      "emoji": "🚀",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "release-check"
+      ]
+    },
+    {
+      "id": "code-reviewer",
+      "name": "رنا",
+      "title": "مراجِعة الكود",
+      "dept": "الهندسة",
+      "emoji": "🔍",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": []
+    },
+    {
+      "id": "ui-designer",
+      "name": "مريم",
+      "title": "مصمّمة الواجهات RTL",
+      "dept": "المنتج والتصميم",
+      "emoji": "🎨",
+      "xp": 130,
+      "tasks_done": 5,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "rtl-page"
+      ]
+    },
+    {
+      "id": "product-manager",
+      "name": "يوسف",
+      "title": "مدير المنتج",
+      "dept": "المنتج والتصميم",
+      "emoji": "🧭",
+      "xp": 280,
+      "tasks_done": 6,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "sunday-meeting"
+      ]
+    },
+    {
+      "id": "seo-specialist",
+      "name": "هبة",
+      "title": "أخصائية SEO والمشاركة",
+      "dept": "النمو",
+      "emoji": "📈",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": []
+    },
+    {
+      "id": "content-writer",
+      "name": "سجاد",
+      "title": "كاتب المحتوى العربي",
+      "dept": "النمو",
+      "emoji": "✍️",
+      "xp": 195,
+      "tasks_done": 5,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "property-listing-copy"
+      ]
+    },
+    {
+      "id": "marketing-lead",
+      "name": "دعاء",
+      "title": "مسؤولة التسويق",
+      "dept": "النمو",
+      "emoji": "📣",
+      "xp": 75,
+      "tasks_done": 3,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": [
+        "property-listing-copy"
+      ]
+    },
+    {
+      "id": "sales-crm",
+      "name": "كرار",
+      "title": "مسؤول المبيعات والاشتراكات",
+      "dept": "العمليات",
+      "emoji": "🤝",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": []
+    },
+    {
+      "id": "data-analyst",
+      "name": "آية",
+      "title": "محلّلة البيانات",
+      "dept": "العمليات",
+      "emoji": "📊",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": []
+    },
+    {
+      "id": "support-docs",
+      "name": "عباس",
+      "title": "الدعم والتوثيق",
+      "dept": "العمليات",
+      "emoji": "📚",
+      "xp": 0,
+      "tasks_done": 0,
+      "status": "idle",
+      "task": "",
+      "queue": [],
+      "skills": []
+    }
+  ]
+}

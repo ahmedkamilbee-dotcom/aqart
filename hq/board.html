@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="60">
+<title>مقر عقاراتي</title>
+<style>
+:root{--bg:#f6f5f1;--panel:#fff;--ink:#1d1f24;--muted:#6b6f78;--line:#e4e1d8;--accent:#c2643a;--accent-soft:#f6e3d8;--ok:#2f8f5b;--warn:#c58b12;--idle:#9aa0a8;--bar:#ece9e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--panel:#1e2026;--ink:#eceef2;--muted:#9a9fa9;--line:#2c2f37;--accent:#e08458;--accent-soft:#3a2a22;--ok:#4cc184;--warn:#e2ad3c;--idle:#6f7580;--bar:#2a2d34}}
+:root[data-theme="dark"]{--bg:#15161a;--panel:#1e2026;--ink:#eceef2;--muted:#9a9fa9;--line:#2c2f37;--accent:#e08458;--accent-soft:#3a2a22;--ok:#4cc184;--warn:#e2ad3c;--idle:#6f7580;--bar:#2a2d34}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,"Segoe UI",Tahoma,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 16px 48px}
+h1{margin:0;font-size:26px}h2{font-size:17px;margin:28px 0 12px;color:var(--muted);font-weight:600}h3{margin:0;font-size:16px}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between}
+.muted{color:var(--muted);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-size:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.desk{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.desk.ceo{border-color:var(--accent);background:linear-gradient(0deg,var(--panel),var(--accent-soft))}
+.desk header{display:flex;gap:10px;align-items:center}
+.avatar{font-size:26px;width:44px;height:44px;display:grid;place-items:center;background:var(--bg);border-radius:12px;flex:none}
+.who{flex:1;min-width:0}.who p{margin:0;color:var(--muted);font-size:13px}
+.status{font-size:12px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.status i{width:9px;height:9px;border-radius:50%;background:var(--idle)}
+.status.working i{background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 25%,transparent);animation:p 1.6s infinite}
+.status.review i{background:var(--warn)}
+@keyframes p{50%{box-shadow:0 0 0 7px transparent}}
+.task{font-size:14px;min-height:22px;overflow-wrap:anywhere}
+.level{display:flex;justify-content:space-between;gap:8px}.lv{font-weight:600;font-size:13px;color:var(--accent)}
+.bar{height:6px;background:var(--bar);border-radius:6px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent)}
+.desk footer{display:flex;flex-direction:column;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+code{font-size:11px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 6px;direction:ltr}
+.cols{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+@media (max-width:860px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.feed li{display:flex;gap:8px;font-size:14px}.feed li span:last-child{display:block}
+.levels{display:flex;flex-direction:column;gap:6px;font-size:14px}.levels div{display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1>🏢 مقر عقاراتي</h1><div class="muted">مدير تنفيذي و15 موظف · تتحدّث اللوحة كل دقيقة</div></div>
+    <div class="muted">آخر تحديث: ١١‏/١١‏/٢٠٢٦، ١٠:٤٢:١٣ م</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>0</b><span class="muted">يشتغلون هسه</span></div>
+    <div class="stat"><b>30</b><span class="muted">مهام هذا الأسبوع</span></div>
+    <div class="stat"><b>765</b><span class="muted">مجموع XP</span></div>
+    <div class="stat"><b>يوسف</b><span class="muted">الأعلى XP</span></div>
+  </div>
+
+  <h2>الإدارة</h2>
+  <div class="grid"><article class="desk ceo">
+  <header>
+    <span class="avatar" aria-hidden="true">👔</span>
+    <div class="who"><h3>Claude</h3><p>المدير التنفيذي</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">85 / 100 XP</span></div>
+  <div class="bar"><span style="width:85%"></span></div>
+  <footer>
+    <span class="muted">11 مهمة منجزة</span>
+    <div class="chips"><code>/hq-task</code><code>/morning-brief</code><code>/sunday-meeting</code><code>/hire</code></div>
+  </footer>
+</article></div>
+  <h2>الهندسة</h2><div class="grid"><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🖥️</span>
+    <div class="who"><h3>ليث</h3><p>مطوّر واجهات React</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/rtl-page</code><code>/release-check</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">⚙️</span>
+    <div class="who"><h3>نور</h3><p>مطوّرة خادم FastAPI</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/api-endpoint</code><code>/release-check</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🗄️</span>
+    <div class="who"><h3>حيدر</h3><p>مهندس قاعدة البيانات (Supabase)</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/supabase-migration</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🛡️</span>
+    <div class="who"><h3>زينب</h3><p>مدقّقة الأمان</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/security-check</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🧪</span>
+    <div class="who"><h3>علي</h3><p>مختبر الجودة</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/release-check</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🚀</span>
+    <div class="who"><h3>مصطفى</h3><p>مهندس النشر والتشغيل</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    <div class="chips"><code>/release-check</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🔍</span>
+    <div class="who"><h3>رنا</h3><p>مراجِعة الكود</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    
+  </footer>
+</article></div><h2>المنتج والتصميم</h2><div class="grid"><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🎨</span>
+    <div class="who"><h3>مريم</h3><p>مصمّمة الواجهات RTL</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م2 · موظف</span><span class="muted" dir="ltr">130 / 250 XP</span></div>
+  <div class="bar"><span style="width:20%"></span></div>
+  <footer>
+    <span class="muted">5 مهمة منجزة</span>
+    <div class="chips"><code>/rtl-page</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🧭</span>
+    <div class="who"><h3>يوسف</h3><p>مدير المنتج</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م3 · موظف أول</span><span class="muted" dir="ltr">280 / 500 XP</span></div>
+  <div class="bar"><span style="width:12%"></span></div>
+  <footer>
+    <span class="muted">6 مهمة منجزة</span>
+    <div class="chips"><code>/sunday-meeting</code></div>
+  </footer>
+</article></div><h2>النمو</h2><div class="grid"><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">📈</span>
+    <div class="who"><h3>هبة</h3><p>أخصائية SEO والمشاركة</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">✍️</span>
+    <div class="who"><h3>سجاد</h3><p>كاتب المحتوى العربي</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م2 · موظف</span><span class="muted" dir="ltr">195 / 250 XP</span></div>
+  <div class="bar"><span style="width:63%"></span></div>
+  <footer>
+    <span class="muted">5 مهمة منجزة</span>
+    <div class="chips"><code>/property-listing-copy</code></div>
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">📣</span>
+    <div class="who"><h3>دعاء</h3><p>مسؤولة التسويق</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">75 / 100 XP</span></div>
+  <div class="bar"><span style="width:75%"></span></div>
+  <footer>
+    <span class="muted">3 مهمة منجزة</span>
+    <div class="chips"><code>/property-listing-copy</code></div>
+  </footer>
+</article></div><h2>العمليات</h2><div class="grid"><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">🤝</span>
+    <div class="who"><h3>كرار</h3><p>مسؤول المبيعات والاشتراكات</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">📊</span>
+    <div class="who"><h3>آية</h3><p>محلّلة البيانات</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    
+  </footer>
+</article><article class="desk ">
+  <header>
+    <span class="avatar" aria-hidden="true">📚</span>
+    <div class="who"><h3>عباس</h3><p>الدعم والتوثيق</p></div>
+    <span class="status idle"><i></i>متاح</span>
+  </header>
+  <div class="task"><span class="muted">ماكو مهمة حالية</span></div>
+  <div class="level"><span class="lv">م1 · متدرّب</span><span class="muted" dir="ltr">0 / 100 XP</span></div>
+  <div class="bar"><span style="width:0%"></span></div>
+  <footer>
+    <span class="muted">0 مهمة منجزة</span>
+    
+  </footer>
+</article></div>
+
+  <div class="cols">
+    <section><h2>آخر النشاط</h2><div class="panel">
+      <ul class="feed"><li><span>✅</span><span>Claude أنجز: مقارنة الديمو بأشهر ديموهات الرعب (+10 XP)<span class="muted">هسه</span></span></li><li><span>✅</span><span>Claude أنجز: فيديو تصميم الديمو (دقيقة) (+10 XP)<span class="muted">قبل 2 ساعة</span></span></li><li><span>⭐</span><span>ترقّى يوسف إلى المستوى 3 (موظف أول) 🎉<span class="muted">قبل 3 ساعة</span></span></li><li><span>✅</span><span>يوسف أنجز: الديمو النسخة الرابعة: الصحوة (+50 XP)<span class="muted">قبل 3 ساعة</span></span></li><li><span>✅</span><span>Claude أنجز: محضر نقاش لقطات الديمو (+5 XP)<span class="muted">قبل 3 ساعة</span></span></li><li><span>✅</span><span>دعاء أنجز: نقاش لقطات الديمو (+15 XP)<span class="muted">قبل 3 ساعة</span></span></li><li><span>✅</span><span>سجاد أنجز: نقاش لقطات الديمو (+15 XP)<span class="muted">قبل 3 ساعة</span></span></li><li><span>✅</span><span>مريم أنجز: نقاش لقطات الديمو (+15 XP)<span class="muted">قبل 3 ساعة</span></span></li><li><span>📌</span><span>اجتماع نقاش لقطات الديمو بدا<span class="muted">قبل 3 ساعة</span></span></li><li><span>▶️</span><span>يوسف بدى: الديمو يبدي بالصحوة<span class="muted">قبل 3 ساعة</span></span></li><li><span>⭐</span><span>ترقّى مريم إلى المستوى 2 (موظف) 🎉<span class="muted">قبل 4 ساعة</span></span></li><li><span>✅</span><span>مريم أنجز: لقطات الديمو المبدئية (7 لقطات) (+20 XP)<span class="muted">قبل 4 ساعة</span></span></li><li><span>🏅</span><span>مكافأة لـ يوسف: صاحب الشركة مدح ملف الديمو (+20 XP)<span class="muted">قبل 7 ساعة</span></span></li><li><span>✅</span><span>Claude أنجز: تحديث لوحة الديمو (+5 XP)<span class="muted">قبل 8 ساعة</span></span></li><li><span>✅</span><span>يوسف أنجز: الشريط الحي والألغاز والمتعة (+50 XP)<span class="muted">قبل 8 ساعة</span></span></li><li><span>▶️</span><span>يوسف بدى: ألغاز الشريط والمتعة بالديمو<span class="muted">قبل 8 ساعة</span></span></li><li><span>✅</span><span>Claude أنجز: لوحة تصميم الديمو البصرية (+10 XP)<span class="muted">قبل 8 ساعة</span></span></li><li><span>✅</span><span>يوسف أنجز: الديمو الهادئ 30 دقيقة (+50 XP)<span class="muted">قبل 8 ساعة</span></span></li><li><span>▶️</span><span>يوسف بدى: إعادة تصميم الديمو: هدوء ورعب مستمر 30-40 دقيقة<span class="muted">قبل 8 ساعة</span></span></li><li><span>✅</span><span>سجاد أنجز: تروما علي والسعلوة والطنطل والقصة الكاملة الجديدة (+50 XP)<span class="muted">قبل 8 ساعة</span></span></li><li><span>▶️</span><span>سجاد بدى: دمج تروما علي والسعلوة والطنطل بالقصة الكاملة<span class="muted">قبل 9 ساعة</span></span></li><li><span>✅</span><span>Claude أنجز: القصة الكاملة لمحطة الصدى (نص سردي) (+15 XP)<span class="muted">قبل 13 ساعة</span></span></li><li><span>📌</span><span>تقرير الصبح جاهز<span class="muted">قبل 14 ساعة</span></span></li><li><span>✅</span><span>Claude أنجز: تقرير الصبح وصفحة اللعبة العالمية (+10 XP)<span class="muted">قبل 14 ساعة</span></span></li><li><span>✅</span><span>دعاء أنجز: خطة ترويج محطة الصدى المجانية (+50 XP)<span class="muted">قبل 14 ساعة</span></span></li></ul>
+    </div></section>
+    <section><h2>المستويات</h2><div class="panel levels">
+      <div><span>م1 · متدرّب</span><span class="muted">0+ XP</span></div><div><span>م2 · موظف</span><span class="muted">100+ XP</span></div><div><span>م3 · موظف أول</span><span class="muted">250+ XP</span></div><div><span>م4 · خبير</span><span class="muted">500+ XP</span></div><div><span>م5 · قائد</span><span class="muted">1000+ XP</span></div>
+      <hr style="border:0;border-top:1px solid var(--line);width:100%"><b>الأعلى XP</b><div><span>🥇 يوسف</span><span class="muted">280 XP</span></div><div><span>🥈 سجاد</span><span class="muted">195 XP</span></div><div><span>🥉 مريم</span><span class="muted">130 XP</span></div>
+    </div></section>
+  </div>
+</div>
+</body>
+</html>
