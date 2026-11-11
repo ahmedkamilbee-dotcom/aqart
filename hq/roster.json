@@ -145,10 +145,10 @@
       "title": "مدير المنتج",
       "dept": "المنتج والتصميم",
       "emoji": "🧭",
-      "xp": 230,
-      "tasks_done": 5,
-      "status": "working",
-      "task": "الديمو يبدي بالصحوة",
+      "xp": 280,
+      "tasks_done": 6,
+      "status": "idle",
+      "task": "",
       "queue": [],
       "skills": [
         "sunday-meeting"
