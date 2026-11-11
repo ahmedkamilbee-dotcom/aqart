@@ -1,0 +1,267 @@
+<title>محطة الصدى</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one cinematic column over a live marsh canvas; police-file and cassette details as the subject's own artefacts. Single deliberate dark world. */
+:root{
+  --marsh:#070a09;      /* black water at night */
+  --silt:#0f1412;       /* raised surfaces */
+  --reed:#8f9a8a;       /* muted reed grey-green, body text */
+  --fog:#dfe5dc;        /* headings, fog-white */
+  --pulse:#6fd6a0;      /* faint echo-pulse green */
+  --tea:#b23a17;        /* tea red, the only saturated warm */
+  --line:#1f2724;
+  --display:"Reem Kufi","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic",system-ui,"Segoe UI",Tahoma,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--marsh)}
+body{background:var(--marsh);color:var(--reed);font:300 17px/1.85 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);color:var(--fog);margin:0;text-wrap:balance;font-weight:700}
+p{margin:0}
+.en{font-family:var(--body);direction:ltr;text-align:left;font-size:.86em;color:#6c776f;letter-spacing:.01em}
+.mono{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+a{color:var(--pulse)}
+:focus-visible{outline:2px solid var(--pulse);outline-offset:3px}
+
+/* HERO */
+.hero{position:relative;min-height:min(92vh,820px);display:grid;align-items:end;isolation:isolate;overflow:hidden;border-bottom:1px solid var(--line)}
+#marsh{position:absolute;inset:0;width:100%;height:100%;z-index:-1;cursor:crosshair}
+.fog{position:absolute;inset:-20% -40%;z-index:-1;pointer-events:none;background:
+  radial-gradient(60% 30% at 30% 70%,rgba(223,229,220,.10),transparent 70%),
+  radial-gradient(50% 25% at 75% 62%,rgba(223,229,220,.08),transparent 70%);
+  animation:drift 38s linear infinite alternate}
+.fog.b{animation-duration:55s;animation-direction:alternate-reverse;opacity:.7}
+@keyframes drift{to{transform:translateX(12%)}}
+.hero-inner{padding-block:clamp(120px,22vh,220px) clamp(48px,9vh,96px);display:grid;gap:18px}
+.stamp{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--pulse);direction:ltr;text-align:right;opacity:.85}
+.title{font-size:clamp(64px,15vw,168px);line-height:.95;letter-spacing:-.01em;text-shadow:0 0 40px rgba(111,214,160,.12)}
+.title-en{font-family:var(--mono);font-size:clamp(13px,1.6vw,16px);letter-spacing:.55em;color:var(--reed);direction:ltr;text-align:right}
+.tagline{font-family:var(--display);font-weight:500;font-size:clamp(20px,3vw,30px);color:var(--fog);max-width:24ch;line-height:1.5}
+.hint{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#56625b;direction:ltr;text-align:right}
+
+/* SECTIONS */
+section{padding-block:clamp(64px,10vw,120px);border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--pulse);text-transform:uppercase;direction:ltr;text-align:right;display:block;margin-bottom:14px}
+h2{font-size:clamp(32px,5vw,52px);line-height:1.2;margin-bottom:28px}
+.lede{font-size:clamp(19px,2.2vw,23px);color:var(--fog);max-width:34em;line-height:1.9}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+.cols>*{min-width:0}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.stack{display:grid;gap:18px;max-width:36em}
+.tea{color:var(--tea)}
+
+/* POLICE FILE */
+.file{background:var(--silt);border:1px solid var(--line);padding:24px;position:relative;font-size:15px}
+.file::before{content:"سري للغاية";position:absolute;top:18px;left:18px;font-family:var(--display);color:var(--tea);border:2px solid var(--tea);padding:2px 10px;transform:rotate(-8deg);opacity:.8;font-size:14px}
+.file h3{font-size:24px;margin-bottom:4px}
+.file dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:20px 0 0}
+.file dt{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#5d6962;padding-top:3px}
+.file dd{margin:0;color:var(--fog);min-width:0}
+
+/* WORLD STRIP */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:44px}
+.fact{background:var(--marsh);padding:22px;display:grid;gap:6px;align-content:start}
+.fact b{font-family:var(--mono);font-weight:500;font-size:clamp(26px,3.4vw,38px);color:var(--fog);direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.facts{grid-template-columns:1fr}}
+
+/* PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(28px,4vw,48px) clamp(28px,5vw,64px)}
+.pillar{display:grid;gap:8px;padding-top:18px;border-top:1px solid var(--line);min-width:0}
+.pillar h3{font-size:clamp(21px,2.4vw,26px)}
+@media (max-width:640px){.pillars{grid-template-columns:1fr}}
+
+/* DEMO TAPES */
+.tapes{display:grid;gap:18px}
+.tape{display:grid;grid-template-columns:132px 1fr;gap:22px;align-items:start;background:var(--silt);border:1px solid var(--line);padding:22px}
+.tape>*{min-width:0}
+.label{font-family:var(--mono);font-size:12px;color:#141917;background:#c9c2a8;padding:8px 10px;line-height:1.5;transform:rotate(-1.5deg);direction:ltr;text-align:left}
+.label i{display:block;font-style:normal;font-size:20px;font-weight:500;color:var(--tea)}
+.tape h3{font-size:22px;margin-bottom:8px}
+@media (max-width:560px){.tape{grid-template-columns:1fr}.label{justify-self:start;width:132px}}
+
+/* SPECS */
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.spec{background:var(--marsh);padding:20px;display:grid;gap:4px}
+.spec span{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:#5d6962;direction:ltr;text-align:right}
+.spec b{font-family:var(--display);font-weight:500;color:var(--fog);font-size:19px}
+@media (max-width:760px){.specs{grid-template-columns:repeat(2,1fr)}}
+
+/* CLOSING */
+.closing{text-align:center;border-bottom:0;padding-block:clamp(80px,12vw,150px)}
+.closing h2{font-size:clamp(36px,7vw,72px);margin-bottom:16px}
+.closing .en{text-align:center}
+.platforms{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
+.platforms span{font-family:var(--mono);font-size:13px;letter-spacing:.14em;border:1px solid var(--pulse);color:var(--pulse);padding:10px 20px;direction:ltr}
+footer{padding-block:28px 40px;font-size:13px;color:#4f5a54;text-align:center}
+
+@media (prefers-reduced-motion:reduce){.fog{animation:none}}
+</style>
+
+<header class="hero" aria-label="محطة الصدى">
+  <canvas id="marsh" aria-hidden="true"></canvas>
+  <div class="fog" aria-hidden="true"></div><div class="fog b" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="stamp">BASRA · JAN 1994 · 05:47</div>
+    <h1 class="title">محطة الصدى</h1>
+    <div class="title-en">ECHO STATION</div>
+    <p class="tagline">الضباب ما يخفي الطريق... يخفي الرجعة.</p>
+    <p class="en" style="text-align:right">The fog doesn't hide the road. It hides the way back.</p>
+    <p class="hint">CLICK THE MARSH TO SEND A PULSE</p>
+    <p style="font-size:14px;color:#6c776f">اضغط على الهور حتى تطلق نبضة صدى. العين تكذب، الصدى ما يكذب.</p>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap cols">
+      <div class="stack">
+        <span class="eyebrow">The Case · القضية</span>
+        <h2>اللي ينادي... ينسمع.</h2>
+        <p class="lede">شتاء 1994. الهور دا ينشف، والماي ينسحب كل يوم. بس رجال عملية سرية بقلب الأهوار دا يموتون <span class="tea">غرقانين بمكان ناشف</span>، وأذانهم مسدودة بأشرطة كاسيت.</p>
+        <p>شرطة البصرة تطلب محقق واحد بالاسم: علي، "أذن بغداد"، الرجل اللي يطلّع الاعتراف من أي أحد بصوته هو نفسه. ينزل جنوباً بليلة ضباب، يعبر جسراً مضروباً من حرب قديمة، ويدخل عالم ما بيه غير القصب والماي وسماعات ضخمة تصيّح ويا الفجر.</p>
+        <p>وكل ما يقرب من القاتل، يحس إن أحد كان يستناه من البداية.</p>
+        <p class="en">Winter, 1994. The marshes are being drained. Yet the men of a secret operation keep turning up drowned on dry ground, their ears stuffed with cassette tape. Basra police send for one detective: Ali, "the Ear of Baghdad".</p>
+      </div>
+      <article class="file" aria-label="ملف المحقق علي">
+        <h3>علي</h3>
+        <p class="en">Detective, Baghdad Police</p>
+        <dl>
+          <dt>AGE</dt><dd>43، عزب، شقة بالكرادة</dd>
+          <dt>KNOWN AS</dt><dd>"أذن بغداد"</dd>
+          <dt>METHOD</dt><dd>يسجّل للمتهم، ويرجّعله صوته، ويسهّره لحد ما ينكسر</dd>
+          <dt>HABITS</dt><dd>سگاير سومر، وما ينام، ويتمسخر على الخرافات</dd>
+          <dt>CASE</dt><dd>طلب خاص من شرطة البصرة</dd>
+          <dt>NOTE</dt><dd class="tea">عنده شريط قديم يسمعه كل ليلة. ما يحچي عنه.</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">The World · العالم</span>
+      <h2>الأهوار، 1994</h2>
+      <div class="stack">
+        <p class="lede">حصار، وكهرباء تنقطع، وقرى قصب مهجورة، وسمچ ميت بالطين. محطة ضخ عملاقة تسحب الماي من الهور، وتحتها أبراج سماعات تطلق نبضة صوت بالفجر وتسمع شنو يرجع.</p>
+        <p>أهل الهور يسمّون هاي الليالي <b style="color:var(--fog)">"ليالي الصوت"</b>، ويحفرون تواريخها على عمود المضيف.</p>
+        <p class="en">A siege-era Iraq rarely seen in games: reed villages, black water, and a pumping station that listens to the marsh at dawn.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>05:47</b><span>ساعة النبضة، بعد الأذان بدقايق</span></div>
+        <div class="fact"><b>4</b><span>ليالي تحقيق، من بغداد لقلب الهور</span></div>
+        <div class="fact"><b>0</b><span>أسلحة. أداتك الوحيدة أذنك</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">Horror Pillars · أعمدة الرعب</span>
+      <h2>خوف ما يطلع من الشاشة. يطلع من راسك.</h2>
+      <div class="pillars">
+        <div class="pillar"><h3>ماكو سلاح، بس اكو أذن</h3><p>مسجّل، وسماعة، ونبضة صدى. وكل مرة تسمع، إنت نفسك تنسمع.</p><p class="en">No weapons. Only your ears, and every sound you make is heard.</p></div>
+        <div class="pillar"><h3>ماكو مكان آمن</h3><p>القاتل إنسان ذكي يحفظ وين تخبّيت، ويعلّم المكان باستكان چاي. حتى السيارة مو آمنة.</p><p class="en">A human hunter who learns your hiding places.</p></div>
+        <div class="pillar"><h3>الهدوء أطول من الخوف</h3><p>دقايق من الترقّب قبل كل ضربة. ماكو رعب رخيص؛ كل لحظة تنبني بصبر.</p><p class="en">Long silences. Every scare is earned.</p></div>
+        <div class="pillar"><h3>الصوت الكاذب ما عنده صدى</h3><p>عقل علي دا ينكسر، والهلوسات تكذب. بس الصوت الحقيقي يرتد بالمكان، والكاذب ناشف. تعلّم تسمع الفرق.</p><p class="en">Ali's mind is breaking. Real sound echoes; lies don't.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">The Demo · الديمو</span>
+      <h2>ثلاث لحظات من الديمو</h2>
+      <div class="tapes">
+        <article class="tape">
+          <div class="label">SIDE A<i>المحطة الفرعية</i>04:58</div>
+          <div><h3>الحوض</h3><p>تتمدد بالماي البارد تحت أرضية حديد مشبّك، حابس نفسك. خطوات تقرب وتوقف فوق وجهك بالضبط. وبعدها تسمع تسجيل لتنفّسك إنت، من قبل دقيقة.</p><p class="en">Hiding under a steel grate, you hear your own breathing played back to you.</p></div>
+        </article>
+        <article class="tape">
+          <div class="label">SIDE A<i>الممر</i>05:21</div>
+          <div><h3>الممر اللي يتكرر</h3><p>نفس الممر كل مرة، وكل مرة شي صغير تغيّر. بآخر دورة ينطفي الضوء، والنبضة ترسم صفوف ناس گاعدين مثل محكمة. وواحد منهم مو هلوسة.</p><p class="en">A looping corridor. On the last loop, one of the figures isn't a hallucination.</p></div>
+        </article>
+        <article class="tape">
+          <div class="label">SIDE B<i>السيارة</i>05:47</div>
+          <div><h3>ثلاث دگات</h3><p>توصل للسيارة وتسد الأبواب. أربعين ثانية ما يصير بيها شي. وبعدها ثلاث دگات هادية على الجامة.</p><p class="en">You reach the car. Forty seconds of silence. Then, three soft knocks on the glass.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">Specs · المواصفات</span>
+      <div class="specs">
+        <div class="spec"><span>GENRE</span><b>رعب نفسي وتحقيق</b></div>
+        <div class="spec"><span>LANGUAGES</span><b>عربي و English</b></div>
+        <div class="spec"><span>PLATFORM</span><b>PC</b></div>
+        <div class="spec"><span>ENGINE</span><b>Unity</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <span class="eyebrow" style="text-align:center">Coming Soon · قريباً</span>
+      <h2>لا تجاوب إذا سمعت اسمك.</h2>
+      <p class="en">Don't answer if you hear your name.</p>
+      <div class="platforms"><span>ITCH.IO</span><span>STEAM</span></div>
+    </div>
+  </section>
+</main>
+<footer class="wrap">محطة الصدى · لعبة رعب عراقية مستقلة · كل الأحداث والشخصيات خيالية</footer>
+
+<script>
+(function(){
+  const c=document.getElementById('marsh'),x=c.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,dpr,reeds=[],figs=[],pulses=[],t0=performance.now();
+  function rnd(a,b){return a+Math.random()*(b-a)}
+  function build(){
+    dpr=Math.min(devicePixelRatio||1,2);W=c.clientWidth;H=c.clientHeight;
+    c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+    const horizon=H*.66;reeds=[];
+    const n=Math.round(W/5);
+    for(let i=0;i<n;i++){reeds.push({x:rnd(0,W),h:rnd(H*.08,H*.34),lean:rnd(-.18,.18),w:rnd(.6,1.6),base:horizon+rnd(-6,10),ph:rnd(0,6.28)});}
+    figs=[];const fc=Math.max(5,Math.round(W/160));
+    for(let i=0;i<fc;i++){figs.push({x:rnd(W*.06,W*.94),y:horizon+rnd(4,30),s:rnd(.7,1.15),a:0});}
+    figs.sort((a,b)=>a.y-b.y);
+  }
+  function figure(f){
+    const s=f.s*Math.min(1,H/700)*1.1,y=f.y;x.save();x.globalAlpha=f.a;x.fillStyle='rgba(111,214,160,.9)';
+    x.beginPath();x.arc(f.x,y-62*s,7*s,0,6.283);x.fill();
+    x.beginPath();x.moveTo(f.x-11*s,y);x.quadraticCurveTo(f.x-13*s,y-40*s,f.x-6*s,y-52*s);x.lineTo(f.x+6*s,y-52*s);x.quadraticCurveTo(f.x+13*s,y-40*s,f.x+11*s,y);x.closePath();x.fill();
+    x.restore();
+  }
+  function draw(now){
+    const t=(now-t0)/1000,horizon=H*.66;
+    x.clearRect(0,0,W,H);
+    const sky=x.createLinearGradient(0,0,0,horizon);sky.addColorStop(0,'#050706');sky.addColorStop(1,'#101814');
+    x.fillStyle=sky;x.fillRect(0,0,W,horizon);
+    const wat=x.createLinearGradient(0,horizon,0,H);wat.addColorStop(0,'#0b110f');wat.addColorStop(1,'#030404');
+    x.fillStyle=wat;x.fillRect(0,horizon,W,H-horizon);
+    x.strokeStyle='rgba(223,229,220,.05)';x.lineWidth=1;
+    for(let i=0;i<14;i++){const yy=horizon+8+i*i*1.6;if(yy>H)break;x.beginPath();for(let xx=0;xx<=W;xx+=24){const o=Math.sin(xx*.02+t*.6+i)*1.2;xx?x.lineTo(xx,yy+o):x.moveTo(xx,yy+o);}x.stroke();}
+    figs.forEach(f=>{f.a=0;pulses.forEach(p=>{const d=Math.hypot(f.x-p.x,f.y-p.y);const edge=Math.abs(d-p.r);if(edge<70){f.a=Math.max(f.a,(1-edge/70)*p.life*.85);}});if(f.a>0.01)figure(f);});
+    x.strokeStyle='#020302';
+    reeds.forEach(r=>{const sway=reduce?0:Math.sin(t*.7+r.ph)*3;x.lineWidth=r.w;x.beginPath();x.moveTo(r.x,r.base);x.quadraticCurveTo(r.x+r.lean*r.h*.5,r.base-r.h*.6,r.x+r.lean*r.h+sway,r.base-r.h);x.stroke();});
+    pulses.forEach(p=>{p.r+=reduce?0:3.2;p.life-=reduce?.02:.0045;
+      for(let k=0;k<3;k++){const rr=p.r-k*26;if(rr<=0)continue;x.beginPath();x.ellipse(p.x,p.y,rr,rr*.32,0,0,6.283);x.strokeStyle='rgba(111,214,160,'+(p.life*(.5-k*.14)).toFixed(3)+')';x.lineWidth=1.2;x.stroke();}
+    });
+    pulses=pulses.filter(p=>p.life>0);
+    requestAnimationFrame(draw);
+  }
+  function pulse(px,py){pulses.push({x:px,y:py,r:4,life:1});}
+  c.addEventListener('pointerdown',e=>{const b=c.getBoundingClientRect();pulse(e.clientX-b.left,Math.max(e.clientY-b.top,H*.62));});
+  addEventListener('resize',build);
+  build();pulse(W*.5,H*.7);pulses[0].r=W*.22;
+  if(!reduce)setInterval(()=>{if(!document.hidden)pulse(rnd(W*.2,W*.8),H*rnd(.68,.78));},7000);
+  requestAnimationFrame(draw);
+})();
+</script>
